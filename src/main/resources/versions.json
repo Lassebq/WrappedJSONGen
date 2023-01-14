@@ -582,6 +582,12 @@
         "urlServer": "http://files.betacraft.uk/server-archive/classic/c1.6.zip"
     },
     {
+        "id": "1.2",
+        "releaseTime": "2012-02-29T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.2-pre.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.2/prerelease/1.2-pre.jar"
+    },
+    {
         "id": "1.2.3",
         "releaseTime": "2012-03-02T07:36:08+00:00",
         "urlClient": "https://launcher.mojang.com/v1/objects/5134e433afeba375c00bbdcd8aead1d3222813ee/client.jar",

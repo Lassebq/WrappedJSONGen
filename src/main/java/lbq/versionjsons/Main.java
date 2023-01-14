@@ -12,10 +12,12 @@ public class Main {
 			System.out.println("--path [path] - Specifiy jsons output directory");
 			System.out.println("--wrapperJar [path] - Update json libraries with the new wrapper artifact");
 			System.out.println("--packToFolders - Copy each json to a folder with the name of the version");
+			System.out.println("--skipManifest - Skips jsons from manifest");
 		}
 		Path dir = null;
 		Path wrapperJar = null;
 		boolean packToFolders = false;
+		boolean skipManifest = false;
 		for(int i = 0; i < args.length; i++) {
 			String arg = args[i];
 			boolean hasNext = i + 1 < args.length;
@@ -28,11 +30,15 @@ public class Main {
 			if(arg.equals("--packToFolders")) {
 				packToFolders = true;
 			}
+			if(arg.equals("--skipManifest")) {
+				skipManifest = true;
+			}
 			i++;
 		}
 		if(dir != null) {
 			try {
 				VersionsWriter verWriter = new VersionsWriter(dir, wrapperJar);
+				if(skipManifest) verWriter.skipManifest();
 				verWriter.generateJSONs();
 				if(packToFolders) {
 					verWriter.packToFolders();

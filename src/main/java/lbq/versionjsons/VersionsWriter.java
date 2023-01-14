@@ -20,6 +20,7 @@ public class VersionsWriter {
 
 	private final Path versionsDir;
 	private JSONObject wrapperArtifact;
+	private boolean skipManifest;
 
 	public VersionsWriter(Path dir, Path wrapperJar) {
 		versionsDir = dir;
@@ -57,43 +58,11 @@ public class VersionsWriter {
 			}
 		}
 		List<String> savedJSONs = new ArrayList<>();
-		JSONArray versions = manifest.getJSONArray("versions");
-		Files.createDirectories(versionsDir);
-		for(int i = 0; i < versions.length(); i++) {
-			JSONObject ver = versions.getJSONObject(i);
-			URL versionUrl = new URL(ver.getString("url"));
-			String id = ver.getString("id");
-			System.out.println(id);
-			savedJSONs.add(id);
-			JSONObject version = new JSONObject(new String(Util.readAllBytes(versionUrl.openStream())));
-			if(!version.has("minecraftArguments")) {
-				continue;
-			}
-			Instant time = Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse(version.getString("releaseTime")));
-			if(time.compareTo(soundLibTime) > 0) {
-				version.put("libraries", libraries);
-			} else {
-				version.put("libraries", librariesNoSoundLib);
-			}
-			for(String key : preset.keySet()) {
-				if(key.equals("libraries")) {
-					continue;
-				}
-				version.put(key, preset.get(key));
-			}
-			version.put("minecraftArguments", version.getString("minecraftArguments")
-					.replace("${auth_player_name} ${auth_session}", "--username ${auth_player_name} --sessionid ${auth_session}"));
-			try(BufferedWriter writer = Files.newBufferedWriter(versionsDir.resolve(id + ".json"))) {
-				version.write(writer);
-			}
-		}
 		JSONArray versionsList = Util.parseJSONArray(ClassLoader.getSystemResourceAsStream("versions.json"));
 		for(int i = 0; i < versionsList.length(); i++) {
 			JSONObject ver = versionsList.getJSONObject(i);
 			String id = ver.getString("id");
-			if(savedJSONs.contains(id)) {
-				continue;
-			}
+			savedJSONs.add(id);
 			System.out.println(id);
 			Instant time = Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse(ver.getString("releaseTime")));
 			String clientURL = ver.optString("urlClient", null);
@@ -103,12 +72,46 @@ public class VersionsWriter {
 				version.write(writer);
 			}
 		}
+		if(!skipManifest) {
+			JSONArray versions = manifest.getJSONArray("versions");
+			Files.createDirectories(versionsDir);
+			for(int i = 0; i < versions.length(); i++) {
+				JSONObject ver = versions.getJSONObject(i);
+				URL versionUrl = new URL(ver.getString("url"));
+				String id = ver.getString("id");
+				if(savedJSONs.contains(id)) {
+					continue;
+				}
+				System.out.println(id);
+				JSONObject version = Util.parseJSON(versionUrl.openStream());
+				if(!version.has("minecraftArguments")) {
+					continue;
+				}
+				Instant time = Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse(version.getString("releaseTime")));
+				if(time.compareTo(soundLibTime) > 0) {
+					version.put("libraries", libraries);
+				} else {
+					version.put("libraries", librariesNoSoundLib);
+				}
+				for(String key : preset.keySet()) {
+					if(key.equals("libraries")) {
+						continue;
+					}
+					version.put(key, preset.get(key));
+				}
+				version.put("minecraftArguments", version.getString("minecraftArguments")
+						.replace("${auth_player_name} ${auth_session}", "--username ${auth_player_name} --sessionid ${auth_session}"));
+				try(BufferedWriter writer = Files.newBufferedWriter(versionsDir.resolve(id + ".json"))) {
+					version.write(writer);
+				}
+			}
+		}
 	}
 
 	public void packToFolders() throws IOException {
 		Files.list(versionsDir).forEach(p -> {
 			String fileName = p.getFileName().toString();
-			if(!Files.isRegularFile(p) || !p.endsWith(".json")) {
+			if(!Files.isRegularFile(p) || !fileName.endsWith(".json")) {
 				return;
 			}
 			try {
@@ -171,7 +174,7 @@ public class VersionsWriter {
 		else if(id.startsWith("b")) {
 			version.put("type", "old_beta");
 		}
-		else if(id.charAt(2) == 'w') {
+		else if(id.charAt(2) == 'w' || id.equals("1.2")) {
 			version.put("type", "snapshot");
 		} else {
 			version.put("type", "release");
@@ -214,5 +217,9 @@ public class VersionsWriter {
 			artifact.put("sha1", sha1);
 		}
 		return obj;
+	}
+
+	public void skipManifest() {
+		skipManifest = true;
 	}
 }
