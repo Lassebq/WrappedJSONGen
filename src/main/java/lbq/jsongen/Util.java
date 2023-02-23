@@ -1,39 +1,13 @@
-package lbq.versionjsons;
+package lbq.jsongen;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 public class Util {
-
-	public static JSONObject parseJSON(Path path) throws IOException {
-		return parseJSON(Files.newInputStream(path));
-	}
-
-	public static JSONArray parseJSONArray(Path path) throws IOException {
-		return parseJSONArray(Files.newInputStream(path));
-	}
-
-	public static JSONObject parseJSON(InputStream stream) throws IOException {
-		byte[] bytes = readAllBytes(stream);
-		String content = new String(bytes);
-		return new JSONObject(content);
-	}
-
-	public static JSONArray parseJSONArray(InputStream stream) throws IOException {
-		byte[] bytes = readAllBytes(stream);
-		String content = new String(bytes);
-		return new JSONArray(content);
-	}
-
 	public static byte[] readAllBytes(InputStream inputStream) throws IOException {
 		final int bufLen = 4 * 0x400; // 4KB
 		byte[] buf = new byte[bufLen];

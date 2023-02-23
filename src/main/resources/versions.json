@@ -648,5 +648,512 @@
         "releaseTime": "2010-09-13T18:33:30+00:00",
         "urlClient": "http://files.betacraft.uk/launcher/assets/versions/a1.1.0-2.jar",
         "urlServer": "http://files.betacraft.uk/server-archive/alpha/a0.2.0_01.jar"
+    },
+    {
+        "id": "11w47a",
+        "releaseTime": "2011-11-24T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.1/11w47a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.1/prerelease/11w47a.jar"
+    },
+    {
+        "id": "11w48a",
+        "releaseTime": "2011-12-01T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.1/11w48a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.1/prerelease/11w48a.jar"
+    },
+    {
+        "id": "11w49a",
+        "releaseTime": "2011-12-08T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.1/11w49a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.1/prerelease/11w49a.jar"
+    },
+    {
+        "id": "11w50a",
+        "releaseTime": "2011-12-15T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.1/11w50a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.1/prerelease/11w50a.jar"
+    },
+    {
+        "id": "12w01a",
+        "releaseTime": "2012-01-05T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.1/12w01a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.1/prerelease/12w01a.jar"
+    },
+    {
+        "id": "12w03a",
+        "releaseTime": "2012-01-19T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.2/12w03a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.2/prerelease/12w03a.jar"
+    },
+    {
+        "id": "12w04a",
+        "releaseTime": "2012-01-26T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.2/12w04a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.2/prerelease/12w04a.jar"
+    },
+    {
+        "id": "12w05a",
+        "releaseTime": "2012-02-02T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.2/12w05a-1442.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.2/prerelease/12w05a-1442.jar"
+    },
+    {
+        "id": "12w05b",
+        "releaseTime": "2012-02-03T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.2/12w05b.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.2/prerelease/12w05b.jar"
+    },
+    {
+        "id": "12w06a",
+        "releaseTime": "2012-02-09T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.2/12w06a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.2/prerelease/12w06a.jar"
+    },
+    {
+        "id": "12w07a",
+        "releaseTime": "2012-02-15T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.2/12w07a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.2/prerelease/12w07a.jar"
+    },
+    {
+        "id": "12w07b",
+        "releaseTime": "2012-02-15T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.2/12w07b.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.2/prerelease/12w07b.jar"
+    },
+    {
+        "id": "12w08a",
+        "releaseTime": "2012-02-23T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.2/12w08a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.2/prerelease/12w08a.jar"
+    },
+    {
+        "id": "12w15a",
+        "releaseTime": "2012-04-12T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.3/12w15a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.3/prerelease/12w15a.jar"
+    },
+    {
+        "id": "12w16a",
+        "releaseTime": "2012-04-19T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.3/12w16a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.3/prerelease/12w16a.jar"
+    },
+    {
+        "id": "12w17a",
+        "releaseTime": "2012-04-26T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.3/12w17a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.3/prerelease/12w17a-1424.jar"
+    },
+    {
+        "id": "12w18a",
+        "releaseTime": "2012-05-03T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.3/12w18a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.3/prerelease/12w18a.jar"
+    },
+    {
+        "id": "12w19a",
+        "releaseTime": "2012-05-10T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.3/12w19a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.3/prerelease/12w19a.jar"
+    },
+    {
+        "id": "12w21a",
+        "releaseTime": "2012-05-24T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.3/12w21a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.3/prerelease/12w21a.jar"
+    },
+    {
+        "id": "12w21b",
+        "releaseTime": "2012-05-25T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.3/12w21b.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.3/prerelease/12w21b.jar"
+    },
+    {
+        "id": "12w22a",
+        "releaseTime": "2012-05-31T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.3/12w22a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.3/prerelease/12w22a.jar"
+    },
+    {
+        "id": "12w23a",
+        "releaseTime": "2012-06-07T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.3/12w23a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.3/prerelease/12w23a.jar"
+    },
+    {
+        "id": "12w23b",
+        "releaseTime": "2012-06-07T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.3/12w23b.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.3/prerelease/12w23b.jar"
+    },
+    {
+        "id": "12w24a",
+        "releaseTime": "2012-06-14T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.3/12w24a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.3/prerelease/12w24a.jar"
+    },
+    {
+        "id": "12w25a",
+        "releaseTime": "2012-06-21T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.3/12w25a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.3/prerelease/12w25a.jar"
+    },
+    {
+        "id": "12w26a",
+        "releaseTime": "2012-06-27T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.3/12w26a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.3/prerelease/12w26a.jar"
+    },
+    {
+        "id": "12w27a",
+        "releaseTime": "2012-07-05T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.3/12w27a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.3/prerelease/12w27a.jar"
+    },
+    {
+        "id": "12w30a",
+        "releaseTime": "2012-07-23T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.3/12w30a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.3/prerelease/12w30a.jar"
+    },
+    {
+        "id": "12w30b",
+        "releaseTime": "2012-07-23T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.3/12w30b.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.3/prerelease/12w30b.jar"
+    },
+    {
+        "id": "12w30c",
+        "releaseTime": "2012-07-24T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.3/12w30c.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.3/prerelease/12w30c.jar"
+    },
+    {
+        "id": "12w30d",
+        "releaseTime": "2012-07-25T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.3/12w30d.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.3/prerelease/12w30d.jar"
+    },
+    {
+        "id": "12w30e",
+        "releaseTime": "2012-07-25T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.3/12w30e.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.3/prerelease/12w30e.jar"
+    },
+    {
+        "id": "12w32a",
+        "releaseTime": "2012-08-09T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.4/12w32a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.4/prerelease/12w32a-1532.jar"
+    },
+    {
+        "id": "12w34a",
+        "releaseTime": "2012-08-23T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.4/12w34a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.4/prerelease/12w34a.jar"
+    },
+    {
+        "id": "12w34b",
+        "releaseTime": "2012-08-24T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.4/12w34b.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.4/prerelease/12w34b.jar"
+    },
+    {
+        "id": "12w36a",
+        "releaseTime": "2012-09-06T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.4/12w36a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.4/prerelease/12w36a.jar"
+    },
+    {
+        "id": "12w37a",
+        "releaseTime": "2012-09-13T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.4/12w37a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.4/prerelease/12w37a.jar"
+    },
+    {
+        "id": "12w38a",
+        "releaseTime": "2012-09-20T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.4/12w38a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.4/prerelease/12w38a.jar"
+    },
+    {
+        "id": "12w38b",
+        "releaseTime": "2012-09-21T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.4/12w38b.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.4/prerelease/12w38b.jar"
+    },
+    {
+        "id": "12w39a",
+        "releaseTime": "2012-09-27T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.4/12w39a-1243.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.4/prerelease/12w39a-1243.jar"
+    },
+    {
+        "id": "12w39b",
+        "releaseTime": "2012-09-28T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.4/12w39b.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.4/prerelease/12w39b.jar"
+    },
+    {
+        "id": "12w40a",
+        "releaseTime": "2012-10-04T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.4/12w40a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.4/prerelease/12w40a.jar"
+    },
+    {
+        "id": "12w40b",
+        "releaseTime": "2012-10-05T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.4/12w40b.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.4/prerelease/12w40b.jar"
+    },
+    {
+        "id": "12w41a",
+        "releaseTime": "2012-10-11T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.4/12w41a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.4/prerelease/12w41a.jar"
+    },
+    {
+        "id": "12w41b",
+        "releaseTime": "2012-10-12T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.4/12w41b.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.4/prerelease/12w41b.jar"
+    },
+    {
+        "id": "12w42a",
+        "releaseTime": "2012-10-17T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.4/12w42a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.4/prerelease/12w42a.jar"
+    },
+    {
+        "id": "12w42b",
+        "releaseTime": "2012-10-18T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.4/12w42b.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.4/prerelease/12w42b.jar"
+    },
+    {
+        "id": "12w49a",
+        "releaseTime": "2012-12-07T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.4/12w49a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.4/prerelease/12w49a.jar"
+    },
+    {
+        "id": "12w50a",
+        "releaseTime": "2012-12-13T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.4/12w50a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.4/prerelease/12w50a.jar"
+    },
+    {
+        "id": "12w50b",
+        "releaseTime": "2012-12-14T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.4/12w50b.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.4/prerelease/12w50b.jar"
+    },
+    {
+        "id": "13w01a",
+        "releaseTime": "2013-01-03T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.5/13w01a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.5/prerelease/13w01a.jar"
+    },
+    {
+        "id": "13w01b",
+        "releaseTime": "2013-01-04T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.5/13w01b.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.5/prerelease/13w01b.jar"
+    },
+    {
+        "id": "13w02a",
+        "releaseTime": "2013-01-10T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.5/13w02a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.5/prerelease/13w02a.jar"
+    },
+    {
+        "id": "13w02b",
+        "releaseTime": "2013-01-11T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.5/13w02b.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.5/prerelease/13w02b.jar"
+    },
+    {
+        "id": "13w03a",
+        "releaseTime": "2013-01-17T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.5/13w03a-1647.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.5/prerelease/13w03a-1647.jar"
+    },
+    {
+        "id": "13w04a",
+        "releaseTime": "2013-01-24T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.5/13w04a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.5/prerelease/13w04a.jar"
+    },
+    {
+        "id": "13w05a",
+        "releaseTime": "2013-01-31T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.5/13w05a-1538.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.5/prerelease/13w05a-1537.jar"
+    },
+    {
+        "id": "13w05b",
+        "releaseTime": "2013-02-01T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.5/13w05b.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.5/prerelease/13w05b.jar"
+    },
+    {
+        "id": "13w06a",
+        "releaseTime": "2013-02-07T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.5/13w06a-1636.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.5/prerelease/13w06a-1636.jar"
+    },
+    {
+        "id": "13w07a",
+        "releaseTime": "2013-02-14T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.5/13w07a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.5/prerelease/13w07a.jar"
+    },
+    {
+        "id": "13w09a",
+        "releaseTime": "2013-02-26T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.5/13w09a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.5/prerelease/13w09a.jar"
+    },
+    {
+        "id": "13w09b",
+        "releaseTime": "2013-02-27T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.5/13w09b.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.5/prerelease/13w09b.jar"
+    },
+    {
+        "id": "13w09c",
+        "releaseTime": "2013-03-01T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.5/13w09c.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.5/prerelease/13w09c.jar"
+    },
+    {
+        "id": "13w10a",
+        "releaseTime": "2013-03-04T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.5/13w10a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.5/prerelease/13w10a.jar"
+    },
+    {
+        "id": "13w10b",
+        "releaseTime": "2013-03-06T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.5/13w10b.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.5/prerelease/13w10b.jar"
+    },
+    {
+        "id": "13w11a",
+        "releaseTime": "2013-02-14T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.5/13w11a.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.5/prerelease/13w11a.jar"
+    },
+    {
+        "id": "13w12~",
+        "releaseTime": "2013-03-19T00:00:00+00:00",
+        "urlClient": "https://files.betacraft.uk/launcher/assets/versions/1.5/13w12~-1439.jar",
+        "urlServer": "https://files.betacraft.uk/server-archive/release/1.5/prerelease/13w11a.jar"
+    },
+    {
+        "id": "b1.8-pre1-1",
+        "releaseTime": "2011-09-09T00:00:00+00:00",
+		"urlClient": "https://files.betacraft.uk/launcher/assets/versions/b1.8-pre-1.jar",
+		"urlServer": "https://files.betacraft.uk/server-archive/beta/prerelease/b1.8-pre1-091358.jar"
+    },
+    {
+        "id": "b1.8-pre1-2",
+        "releaseTime": "2011-09-09T00:00:00+00:00",
+		"urlClient": "https://files.betacraft.uk/launcher/assets/versions/b1.8-pre1-091358.jar",
+		"urlServer": "https://files.betacraft.uk/server-archive/beta/prerelease/b1.8-pre1-091358.jar"
+    },
+    {
+        "id": "b1.8-pre2",
+        "releaseTime": "2011-09-13T00:00:00+00:00",
+		"urlClient": "https://files.betacraft.uk/launcher/assets/versions/b1.8-pre2.jar",
+		"urlServer": "https://files.betacraft.uk/server-archive/beta/prerelease/b1.8-pre2.jar"
+    },
+    {
+        "id": "b1.9-pre1",
+        "releaseTime": "2011-09-22T00:00:00+00:00",
+		"urlClient": "https://files.betacraft.uk/launcher/assets/versions/b1.9-pre1.jar",
+		"urlServer": "https://files.betacraft.uk/server-archive/beta/prerelease/b1.9-pre1.jar"
+    },
+    {
+        "id": "b1.9-pre2",
+        "releaseTime": "2011-09-29T00:00:00+00:00",
+		"urlClient": "https://files.betacraft.uk/launcher/assets/versions/b1.9-pre2.jar",
+		"urlServer": "https://files.betacraft.uk/server-archive/beta/prerelease/b1.9-pre2.jar"
+    },
+    {
+        "id": "b1.9-pre3",
+        "releaseTime": "2011-10-06T00:00:00+00:00",
+		"urlClient": "https://files.betacraft.uk/launcher/assets/versions/b1.9-pre3-1402.jar",
+		"urlServer": "https://files.betacraft.uk/server-archive/beta/prerelease/b1.9-pre3.jar"
+    },
+    {
+        "id": "b1.9-pre4",
+        "releaseTime": "2011-10-13T00:00:00+00:00",
+		"urlClient": "https://files.betacraft.uk/launcher/assets/versions/b1.9-pre4-1435.jar",
+		"urlServer": "https://files.betacraft.uk/server-archive/beta/prerelease/b1.9-pre4-1441.jar"
+    },
+    {
+        "id": "b1.9-pre6",
+        "releaseTime": "2011-11-11T00:00:00+00:00",
+		"urlClient": "https://files.betacraft.uk/launcher/assets/versions/b1.9-pre6.jar",
+		"urlServer": "https://files.betacraft.uk/server-archive/beta/prerelease/b1.9-pre6.jar"
+    },
+    {
+        "id": "c0.24_st_03",
+        "releaseTime": "2009-09-01T00:17:55+00:00",
+		"urlClient": "https://files.betacraft.uk/launcher/assets/versions/c0.24_st_03.jar"
+    },
+    {
+        "id": "c0.25_05_st",
+        "releaseTime": "2009-09-03T00:17:11+00:00",
+		"urlClient": "https://files.betacraft.uk/launcher/assets/versions/c0.25_05_st.jar"
+    },
+    {
+        "id": "c0.27_st",
+        "releaseTime": "2009-10-24T00:00:00+00:00",
+		"urlClient": "https://files.betacraft.uk/launcher/assets/versions/c0.27_st.jar"
+    },
+    {
+        "id": "c0.28_01",
+        "releaseTime": "2009-10-27T00:00:00+00:00",
+		"urlClient": "https://files.betacraft.uk/launcher/assets/versions/c0.28_01.jar",
+		"urlServer": "https://files.betacraft.uk/server-archive/classic/c1.8.3.zip"
+    },
+    {
+        "id": "c0.29",
+        "releaseTime": "2009-10-29T10:00:00+00:00",
+		"urlClient": "https://files.betacraft.uk/launcher/assets/versions/c0.29.jar",
+		"urlServer": "https://files.betacraft.uk/server-archive/classic/c1.9.1.zip"
+    },
+    {
+        "id": "c0.29_01",
+        "releaseTime": "2009-10-29T11:00:00+00:00",
+		"urlClient": "https://files.betacraft.uk/launcher/assets/versions/c0.29_01.jar",
+		"urlServer": "https://files.betacraft.uk/server-archive/classic/c1.9.1.zip"
+    },
+    {
+        "id": "c0.29_02",
+        "releaseTime": "2009-10-30T00:00:00+00:00",
+		"urlClient": "https://files.betacraft.uk/launcher/assets/versions/c0.29_02.jar",
+		"urlServer": "https://files.betacraft.uk/server-archive/classic/c1.9.1.zip"
+    },
+    {
+        "id": "c0.29_02",
+        "releaseTime": "2009-10-30T00:00:00+00:00",
+		"urlClient": "https://files.betacraft.uk/launcher/assets/versions/c0.29_02.jar",
+		"urlServer": "https://files.betacraft.uk/server-archive/classic/c1.9.1.zip"
+    },
+    {
+        "id": "c0.30",
+        "releaseTime": "2009-11-10T00:00:00+00:00",
+		"urlClient": "https://files.betacraft.uk/launcher/assets/versions/c0.30-c.jar",
+		"urlServer": "https://files.betacraft.uk/server-archive/classic/c1.10.1.zip"
+    },
+    {
+        "id": "c0.30_st",
+        "releaseTime": "2009-11-10T00:00:00+00:00",
+		"urlClient": "https://files.betacraft.uk/launcher/assets/versions/c0.30-s.jar",
+		"urlServer": "https://files.betacraft.uk/server-archive/classic/c1.10.1.zip"
     }
 ]
