@@ -1,8 +1,8 @@
 {
     "assetIndex": {
         "id": "empty",
-        "sha1": "bf21a9e8fbc5a3846fb05b4fa0859e0917b2202f",
-        "size": 2,
+        "sha1": "62ea787c1f800c091b98678b050453a5ae59d7bc",
+        "size": 14,
         "totalSize": 0,
         "url": "https://mcphackers.github.io/assets/empty.json"
     },
@@ -146,21 +146,21 @@
         {
             "downloads": {
                 "artifact": {
-                    "path": "org/json/json/20220924/json-20220924.jar",
-                    "sha1": "5aa95e7688f76c664af205c5937620f02688dfbc",
-                    "size": 70348,
-                    "url": "https://repo.maven.apache.org/maven2/org/json/json/20220924/json-20220924.jar"
-                },
+					"path": "org/json/json/20230311/json-20230311.jar",
+					"sha1": "d2c95f0a83b1b2b28131d46abfe8e68f7dc07ede",
+					"size": 65667,
+					"url": "https://mcphackers.github.io/libraries/org/json/json/20230311/json-20230311.jar"
+				},
 				"classifiers": {
 					"sources": {
-						"path": "org/json/json/20220924/json-20220924-sources.jar",
-						"sha1": "3d0ee1cbb638dce675fe65d15a7969872942afcc",
-						"size": 67539,
-						"url": "https://repo.maven.apache.org/maven2/org/json/json/20220924/json-20220924-sources.jar"
+						"path": "org/json/json/20230311/json-20230311-sources.jar",
+						"sha1": "1d2af7dcdaaaa910b252988c06520e09125575eb",
+						"size": 70956,
+						"url": "https://mcphackers.github.io/libraries/org/json/json/20230311/json-20230311-sources.jar"
 					}
 				}
             },
-            "name": "org.json:json:20220924"
+            "name": "org.json:json:20230311"
         },
         {
             "downloads": {

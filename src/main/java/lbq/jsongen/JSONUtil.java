@@ -1,13 +1,11 @@
 package lbq.jsongen;
 
-import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -59,10 +57,41 @@ public class JSONUtil {
 		return artifact;
 	}
 	
-	public static void main(String[] args) throws IOException {
-		JSONObject obj = getLibraryArtifact(Paths.get("D:\\Stuff\\git\\MCPHackers.github.io\\server\\c1.10.1.jar"), "https://mcphackers.github.io/server/c1.10.1.jar");
-		try(BufferedWriter writer = Files.newBufferedWriter(Paths.get("C:/Users/Lassebq/Desktop/artifact.json"))) {
-			obj.write(writer);
+	public static JSONObject getLibraryArtifact(String url) throws IOException {
+		JSONObject artifact = new JSONObject();
+		byte[] jar = Util.readAllBytes(new URL(url).openStream());
+		String sha1 = Util.getSHA1(new ByteArrayInputStream(jar));
+		artifact.put("url", url);
+		artifact.put("size", jar.length);
+		artifact.put("sha1", sha1);
+		return artifact;
+	}
+	
+	public static void replaceLibrary(JSONArray libraries, JSONObject library) {
+		String[] libraryName = library.getString("name").split(":");
+		boolean replaced = false;
+		for(int i = libraries.length() - 1; i >= 0 ; i--) {
+			String[] libraryName2 = libraries.getJSONObject(i).getString("name").split(":");
+			if(libraryName[0].equals(libraryName2[0]) && libraryName[1].equals(libraryName2[1])) {
+				if(!replaced) {
+					libraries.put(i, library);
+					replaced = true;
+				} else {
+					libraries.remove(i);
+				}
+			}
+		}
+		if(!replaced) {
+			libraries.put(library);
+		}
+	}
+	
+	public static void removeLibrary(JSONArray libraries, String org, String name) {
+		for(int i = libraries.length() - 1; i >= 0 ; i--) {
+			String[] libraryName2 = libraries.getJSONObject(i).getString("name").split(":");
+			if(org.equals(libraryName2[0]) && name.equals(libraryName2[1])) {
+				libraries.remove(i);
+			}
 		}
 	}
 	

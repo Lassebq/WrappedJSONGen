@@ -7,6 +7,7 @@ public class GeneratorBuilder {
 	private boolean skipManifest = false;
 	private boolean update = false;
 	private boolean packToFolders = false;
+	private boolean generateManifest = false;
 	private Path basePath;
 	private Path wrapperJar;
 	private Path wrapperSource;
@@ -41,8 +42,13 @@ public class GeneratorBuilder {
 		return this;
 	}
 	
+	public GeneratorBuilder generateManifest() {
+		generateManifest = true;
+		return this;
+	}
+	
 	public Generator build() {
-		return new Generator(basePath, wrapperJar, wrapperSource, update, skipManifest, packToFolders);
+		return new Generator(basePath, wrapperJar, wrapperSource, update, skipManifest, packToFolders, generateManifest);
 	}
 	
 }

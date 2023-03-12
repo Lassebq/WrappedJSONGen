@@ -39,6 +39,9 @@ public class Main {
 			if(argName.equalsIgnoreCase("skipManifest")) {
 				builder.skipManifest();
 			}
+			if(argName.equalsIgnoreCase("generateManifest")) {
+				builder.generateManifest();
+			}
 			if(argName.equalsIgnoreCase("update")) {
 				builder.updateFolder();
 			}
