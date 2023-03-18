@@ -27,6 +27,7 @@ public class Generator {
 	private boolean skipManifest;
 	private boolean update;
 	private boolean packToFolders;
+	private Instant startTime;
 
 	public Generator(Path dir, Path wrapperJar, Path wrapperSource, boolean updateJsons, boolean skipMan, boolean packToFolder, boolean genManifest) {
 		basePath = dir;
@@ -34,6 +35,7 @@ public class Generator {
 		generateManifest = genManifest;
 		update = updateJsons;
 		packToFolders = packToFolder;
+		startTime = Instant.now();
 		try {
 			if(wrapperJar != null) {
 				wrapperArtifact = getLibraryArtifact(wrapperJar, "https://mcphackers.github.io/libraries/org/mcphackers/launchwrapper/1.0/launchwrapper-1.0.jar");
@@ -74,14 +76,13 @@ public class Generator {
 				Instant time = getTime(json.getString("releaseTime"));
 				if(time.compareTo(PAULSCODE_TIME) > 0) {
 					for(int i2 = 0; i2 < libraries.length(); i2++) {
-						replaceLibrary(verLibs, libraries.getJSONObject(i2));
+						updated |= replaceLibrary(verLibs, libraries.getJSONObject(i2));
 					}
 				} else {
 					for(int i2 = 0; i2 < librariesNoSoundLib.length(); i2++) {
-						replaceLibrary(verLibs, librariesNoSoundLib.getJSONObject(i2));
+						updated |= replaceLibrary(verLibs, librariesNoSoundLib.getJSONObject(i2));
 					}
 				}
-				updated = true; //TODO detect library changes?
 				String args = json.getString("minecraftArguments");
 				Instant releaseTimeInstant = getTime(json.getString("releaseTime"));
 				int port = getPort(releaseTimeInstant);
@@ -109,10 +110,13 @@ public class Generator {
 				}
 				json.put("minecraftArguments", args);
 				if(updated) {
-					json.put("time", getTimeString(Instant.now()));
-				}
-				try(BufferedWriter writer = Files.newBufferedWriter(p)) {
-					json.write(writer);
+					System.out.println("Modified version: " + id);
+					json.put("time", getTimeString(startTime));
+					try(BufferedWriter writer = Files.newBufferedWriter(p)) {
+						json.write(writer);
+					}
+				} else {
+					//System.out.println("Unmodified version: " + id);
 				}
 				if(packToFolders) {
 					Path outPath = Files.createDirectory(basePath.resolve(id)).resolve(id + ".json");
@@ -235,7 +239,7 @@ public class Generator {
 				if(skin != null) {
 					args += " --skinProxy " + skin;
 				}
-				version.put("time", getTimeString(Instant.now()));
+				version.put("time", getTimeString(startTime));
 				version.put("minecraftArguments", args);
 				Path jsonOut = basePath.resolve(id + ".json");
 				try(BufferedWriter writer = Files.newBufferedWriter(jsonOut)) {
@@ -360,7 +364,7 @@ public class Generator {
 			version.put("type", "release");
 		}
 		version.put("releaseTime", releaseTime);
-		version.put("time", getTimeString(Instant.now()));
+		version.put("time", getTimeString(startTime));
 		Instant releaseTimeInstant = getTime(releaseTime);
 		if(releaseTimeInstant.compareTo(PAULSCODE_TIME) > 0) {
 			version.put("libraries", libraries);

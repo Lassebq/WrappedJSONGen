@@ -35,6 +35,25 @@
         {
             "downloads": {
                 "artifact": {
+                    "path": "org/mcphackers/rdi/rdi/1.0/rdi-1.0.jar",
+                    "sha1": "6fcff0b8d6173ac275f3728a9e5a987cfca88762",
+                    "size": 79599,
+                    "url": "https://mcphackers.github.io/libraries/org/mcphackers/rdi/rdi/1.0/rdi-1.0.jar"
+                },
+				"classifiers": {
+					"sources": {
+						"path": "org/mcphackers/rdi/rdi/1.0/rdi-1.0-sources.jar",
+						"sha1": "f38fbbad7ef3752c75274951d46b63d1d5515a8b",
+						"size": 43261,
+						"url": "https://mcphackers.github.io/libraries/org/mcphackers/rdi/rdi/1.0/rdi-1.0-sources.jar"
+					}
+				}
+            },
+            "name": "org.mcphackers.rdi:rdi:1.0"
+        },
+        {
+            "downloads": {
+                "artifact": {
                     "path": "org/ow2/asm/asm-tree/9.2/asm-tree-9.2.jar",
                     "sha1": "d96c99a30f5e1a19b0e609dbb19a44d8518ac01e",
                     "size": 52660,
@@ -74,14 +93,14 @@
             "downloads": {
                 "artifact": {
                     "path": "org/lwjgl/lwjgl/lwjgl/2.9.4/lwjgl-2.9.4.jar",
-                    "sha1": "ceed2bd61cbd2a35cebbb0b1de25eef565726182",
-                    "size": 1057570,
+                    "sha1": "7c731ace778ed7e79230b14f540c521ba4ee97aa",
+                    "size": 1056258,
                     "url": "https://mcphackers.github.io/libraries/org/lwjgl/lwjgl/lwjgl/2.9.4/lwjgl-2.9.4.jar"
                 },
 				"classifiers": {
 					"sources": {
 						"path": "org/lwjgl/lwjgl/lwjgl/2.9.4/lwjgl-2.9.4-sources.jar",
-						"sha1": "c0900f0f40f0857422ae099b9ecd1bb295966781",
+						"sha1": "00238e95dc14f54ae62ca5dba8e43ea1ee7bcb2c",
 						"size": 951945,
 						"url": "https://mcphackers.github.io/libraries/org/lwjgl/lwjgl/lwjgl/2.9.4/lwjgl-2.9.4-sources.jar"
 					}
@@ -128,14 +147,14 @@
             "downloads": {
                 "artifact": {
                     "path": "org/lwjgl/lwjgl/lwjgl_util/2.9.4/lwjgl_util-2.9.4.jar",
-                    "sha1": "a20fce9b6f239970aa9ae7e7d52b30bb4b7dabe9",
-                    "size": 174010,
+                    "sha1": "a3a627bf1735bc8d924866626c970b047b32994f",
+                    "size": 174009,
                     "url": "https://mcphackers.github.io/libraries/org/lwjgl/lwjgl/lwjgl_util/2.9.4/lwjgl_util-2.9.4.jar"
                 },
 				"classifiers": {
 					"sources": {
 						"path": "org/lwjgl/lwjgl/lwjgl_util/2.9.4/lwjgl_util-2.9.4-sources.jar",
-						"sha1": "281bd224238a00b459844ad44a69d7ce906216e4",
+						"sha1": "8332c819b1f425bea42a5b141fea672d9d1f99ad",
 						"size": 232838,
 						"url": "https://mcphackers.github.io/libraries/org/lwjgl/lwjgl/lwjgl_util/2.9.4/lwjgl_util-2.9.4-sources.jar"
 					}

@@ -67,12 +67,14 @@ public class JSONUtil {
 		return artifact;
 	}
 	
-	public static void replaceLibrary(JSONArray libraries, JSONObject library) {
+	public static boolean replaceLibrary(JSONArray libraries, JSONObject library) {
 		String[] libraryName = library.getString("name").split(":");
 		boolean replaced = false;
+		boolean changed = false;
 		for(int i = libraries.length() - 1; i >= 0 ; i--) {
 			String[] libraryName2 = libraries.getJSONObject(i).getString("name").split(":");
 			if(libraryName[0].equals(libraryName2[0]) && libraryName[1].equals(libraryName2[1])) {
+				changed = changed || !library.similar(libraries.getJSONObject(i));
 				if(!replaced) {
 					libraries.put(i, library);
 					replaced = true;
@@ -82,17 +84,22 @@ public class JSONUtil {
 			}
 		}
 		if(!replaced) {
+			changed = true;
 			libraries.put(library);
 		}
+		return changed;
 	}
 	
-	public static void removeLibrary(JSONArray libraries, String org, String name) {
+	public static boolean removeLibrary(JSONArray libraries, String org, String name) {
+		boolean removed = false;
 		for(int i = libraries.length() - 1; i >= 0 ; i--) {
 			String[] libraryName2 = libraries.getJSONObject(i).getString("name").split(":");
 			if(org.equals(libraryName2[0]) && name.equals(libraryName2[1])) {
 				libraries.remove(i);
+				removed = true;
 			}
 		}
+		return removed;
 	}
 	
 	public static Instant getTime(String time) {
