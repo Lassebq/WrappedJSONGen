@@ -36,15 +36,15 @@
             "downloads": {
                 "artifact": {
                     "path": "org/mcphackers/rdi/rdi/1.0/rdi-1.0.jar",
-                    "sha1": "6fcff0b8d6173ac275f3728a9e5a987cfca88762",
-                    "size": 79599,
+                    "sha1": "855b05d238b72b03197e6702a765f344a32b8291",
+                    "size": 79606,
                     "url": "https://mcphackers.github.io/libraries/org/mcphackers/rdi/rdi/1.0/rdi-1.0.jar"
                 },
 				"classifiers": {
 					"sources": {
 						"path": "org/mcphackers/rdi/rdi/1.0/rdi-1.0-sources.jar",
-						"sha1": "f38fbbad7ef3752c75274951d46b63d1d5515a8b",
-						"size": 43261,
+						"sha1": "def0c8e36a96338a9866141088a45fe4bfaab29a",
+						"size": 43258,
 						"url": "https://mcphackers.github.io/libraries/org/mcphackers/rdi/rdi/1.0/rdi-1.0-sources.jar"
 					}
 				}
