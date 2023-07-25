@@ -23,33 +23,19 @@ import org.json.JSONObject;
 public class Generator {
 
 	private final Path basePath;
-	private JSONObject wrapperArtifact;
-	private JSONObject wrapperArtifactSource;
 	private boolean generateManifest;
 	private boolean skipManifest;
 	private boolean update;
 	private boolean packToFolders;
 	private Instant startTime;
 
-	public Generator(Path dir, Path wrapperJar, Path wrapperSource, boolean updateJsons, boolean skipMan, boolean packToFolder, boolean genManifest) {
+	public Generator(Path dir, boolean updateJsons, boolean skipMan, boolean packToFolder, boolean genManifest) {
 		basePath = dir;
 		skipManifest = skipMan;
 		generateManifest = genManifest;
 		update = updateJsons;
 		packToFolders = packToFolder;
 		startTime = Instant.now();
-		try {
-			if(wrapperJar != null) {
-				wrapperArtifact = getLibraryArtifact(wrapperJar, "https://mcphackers.github.io/libraries/org/mcphackers/launchwrapper/1.0/launchwrapper-1.0.jar");
-				wrapperArtifact.put("path", "org/mcphackers/launchwrapper/1.0/launchwrapper-1.0.jar");
-			}
-			if(wrapperSource != null) {
-				wrapperArtifactSource = getLibraryArtifact(wrapperSource, "https://mcphackers.github.io/libraries/org/mcphackers/launchwrapper/1.0/launchwrapper-1.0-sources.jar");
-				wrapperArtifactSource.put("path", "org/mcphackers/launchwrapper/1.0/launchwrapper-1.0-sources.jar");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public void generate() throws IOException {
@@ -74,7 +60,7 @@ public class Generator {
 			}
 		}
 		JSONObject preset = getPresetJSON();
-		JSONArray libraries = getPresetLibraries(preset);
+		JSONArray libraries = preset.getJSONArray("libraries");
 		JSONArray librariesNoSoundLib = removePaulscode(libraries);
 		for(Path p : collectJSONs(basePath)) {
 			try {
@@ -123,7 +109,8 @@ public class Generator {
 				JSONObject dls = json.getJSONObject("downloads");
 				if(!dls.has("server") && versionServers.containsKey(id)) {
 					updated = true;
-					dls.put("server", getLibraryArtifact(versionServers.get(id)));
+					String serverUrl = versionServers.get(id);
+					dls.put("server", getLibraryArtifact(new URL(serverUrl).openStream(), serverUrl));
 				}
 				json.put("minecraftArguments", args);
 				if(updated) {
@@ -146,38 +133,22 @@ public class Generator {
 		}
 	}
 
-	public JSONArray getPresetLibraries(JSONObject preset) throws IOException {
-		JSONArray libraries = preset.getJSONArray("libraries");
-		if(wrapperArtifact != null) {
-			for(int i = libraries.length() - 1; i >= 0; i--) {
-				JSONObject obj = libraries.getJSONObject(i);
-				String[] libraryName = obj.getString("name").split(":");
-				if(libraryName[0].equals("org.mcphackers") && libraryName[1].equals("launchwrapper")) {
-					obj.getJSONObject("downloads").put("artifact", wrapperArtifact);
-				}
-			}
-		}
-		return libraries;
-	}
-
 	public void generateJSONs() throws IOException {
 		JSONObject manifest = getManifest();
 		JSONObject preset = getPresetJSON();
-		JSONArray libraries = getPresetLibraries(preset);
+		JSONArray libraries = preset.getJSONArray("libraries");
 		JSONArray librariesNoSoundLib = removePaulscode(libraries);
-		JSONObject legacyAssetIndex = new JSONObject();
-		legacyAssetIndex.put("id", "legacy");
-		legacyAssetIndex.put("sha1", "770572e819335b6c0a053f8378ad88eda189fc14");
-		legacyAssetIndex.put("size", 109634);
-		legacyAssetIndex.put("totalSize", 153475165);
-		legacyAssetIndex.put("url", "https://launchermeta.mojang.com/v1/packages/770572e819335b6c0a053f8378ad88eda189fc14/legacy.json");
-		JSONObject authLib156 = new JSONObject();
-		JSONObject authLib156Downloads = new JSONObject();
-		JSONObject artifactAuthLib156 = getLibraryArtifact("https://libraries.minecraft.net/com/mojang/authlib/1.5.6/authlib-1.5.6.jar");
-		artifactAuthLib156.put("path", "com/mojang/authlib/1.5.6/authlib-1.5.6.jar");
-		authLib156Downloads.put("artifact", artifactAuthLib156);
-		authLib156.put("downloads", authLib156Downloads);
-		authLib156.put("name", "com.mojang:authlib:1.5.6");
+		JSONObject assetIndexObj = new JSONObject();
+		String assetIndex = "https://launchermeta.mojang.com/v1/packages/770572e819335b6c0a053f8378ad88eda189fc14/legacy.json";
+		byte[] jar = Util.readAllBytes(new URL(assetIndex).openStream());
+		String sha1 = Util.getSHA1(new ByteArrayInputStream(jar));
+        String assetsId = assetIndex.substring(assetIndex.lastIndexOf('/') + 1).replace(".json", "");
+        assetIndexObj.put("id", assetsId);
+        assetIndexObj.put("size", jar.length);
+        assetIndexObj.put("sha1", sha1);
+        assetIndexObj.put("url", assetIndex);
+
+		JSONObject authLib156 = generateLibraryEntry("https://libraries.minecraft.net/", "com.mojang:authlib:1.5.6");
 
 		Files.createDirectories(basePath);
 		List<String> savedJSONs = new ArrayList<>();
@@ -192,8 +163,8 @@ public class Generator {
 						continue;
 					}
 					System.out.println(id);
-					JSONObject version = parseJSON(versionUrl.openStream());
-					if(!version.has("minecraftArguments")) {
+					JSONObject version = fetchVersion(versionUrl);
+					if(version == null || !version.has("minecraftArguments")) {
 						continue;
 					}
 					JSONArray verLibs = version.getJSONArray("libraries");
@@ -225,8 +196,8 @@ public class Generator {
 					boolean keepAssetsIndex = hasAssetIndex(time, id);
 					if(keepAssetsIndex) {
 						if(version.getString("assets").equals("pre-1.6")) {
-							version.put("assets", "legacy");
-							version.put("assetIndex", legacyAssetIndex); 
+							version.put("assets", assetsId);
+							version.put("assetIndex", assetIndexObj); 
 						}
 					}
 					for(String key : preset.keySet()) {
@@ -289,7 +260,6 @@ public class Generator {
 	}
 	
 	public void generateManifest(boolean v2) throws IOException {
-		//TODO v2 manifest
 		JSONObject manifest = new JSONObject();
 		JSONObject latest = new JSONObject();
 		JSONArray versions = new JSONArray();
@@ -353,7 +323,7 @@ public class Generator {
 	public JSONObject createVersionJSON(String id, String clientURL, String serverURL, String releaseTime) throws IOException {
 		JSONObject version = new JSONObject();
 		JSONObject preset = getPresetJSON();
-		JSONArray libraries = getPresetLibraries(preset);
+		JSONArray libraries = preset.getJSONArray("libraries");
 		JSONArray librariesNoSoundLib = removePaulscode(libraries);
 		JSONObject downloads = new JSONObject();
 		version.put("downloads", downloads);

@@ -42,6 +42,10 @@ public class JSONConstants {
 		return time.compareTo(ASSETINDEX_TIME) >= 0 && !ver.startsWith("1.5.");
 	}
 	
+	/*
+	 * Deprecated
+	 * TODO: Implement betacraft v2 asset indexes in LaunchWrapper
+	 */
 	public static int getPort(Instant time, String ver) {
 		if(time.compareTo(ASSETINDEX_TIME) >= 0 && !ver.startsWith("1.5.")) {
 			return -1;

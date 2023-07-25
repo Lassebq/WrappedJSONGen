@@ -8,6 +8,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Util {
+	public static String readString(InputStream inputStream) throws IOException {
+		return new String(readAllBytes(inputStream));
+	}
+
 	public static byte[] readAllBytes(InputStream inputStream) throws IOException {
 		final int bufLen = 4 * 0x400; // 4KB
 		byte[] buf = new byte[bufLen];

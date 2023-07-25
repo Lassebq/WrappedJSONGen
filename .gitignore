@@ -9,6 +9,9 @@ nbproject
 # gradle
 .gradle/
 
+# vscode
+.vscode/
+
 # vim
 .*.sw[a-p]
 
@@ -28,3 +31,5 @@ nbproject
 # generated
 /repo/
 /bin/
+
+test/
