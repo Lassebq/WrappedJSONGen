@@ -4,14 +4,18 @@ import java.nio.file.Path;
 
 public class GeneratorBuilder {
 
-	private boolean skipManifest = false;
 	private boolean update = false;
 	private boolean packToFolders = false;
 	private boolean generateManifest = false;
+	private boolean lwjglCompat = false;
+	private boolean multimc = false;
+	private boolean micromixin = false;
 	private Path basePath;
-	
-	public GeneratorBuilder skipManifest() {
-		skipManifest = true;
+	private String postfix;
+	private String onlyver;
+
+	public GeneratorBuilder lwjglCompat() {
+		lwjglCompat = true;
 		return this;
 	}
 	
@@ -34,9 +38,29 @@ public class GeneratorBuilder {
 		generateManifest = true;
 		return this;
 	}
+
+    public GeneratorBuilder setPostfix(String string) {
+		postfix = string;
+		return this;
+    }
+
+    public GeneratorBuilder setVersion(String string) {
+		onlyver = string;
+		return this;
+    }
+
+    public GeneratorBuilder setMultiMC() {
+		multimc = true;
+		return this;
+    }
+
+    public GeneratorBuilder micromixin() {
+		micromixin = true;
+		return this;
+    }
 	
 	public Generator build() {
-		return new Generator(basePath, update, skipManifest, packToFolders, generateManifest);
+		return new Generator(basePath, update, packToFolders, generateManifest, postfix, onlyver, lwjglCompat, multimc, micromixin);
 	}
 	
 }

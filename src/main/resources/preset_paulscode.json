@@ -1,0 +1,103 @@
+{
+    "formatVersion": 1,
+    "name": "Paulscode",
+    "uid": "com.paulscode",
+    "version": "20120107",
+    "libraries": [
+        {
+            "downloads": {
+                "artifact": {
+                    "sha1": "4e61cd854bbd3d9765bd7c46fc9008d654b29281\n",
+                    "path": "com/paulscode/codecjorbis/20230120/codecjorbis-20230120.jar",
+                    "size": 102767,
+                    "url": "https://mcphackers.github.io/libraries/com/paulscode/codecjorbis/20230120/codecjorbis-20230120.jar"
+                },
+                "classifiers": {
+                    "sources": {
+                        "sha1": "debb14b0bb049e96cc84087d3b953e56c60867c3\n",
+                        "path": "com/paulscode/codecjorbis/20230120/codecjorbis-20230120-sources.jar",
+                        "size": 94216,
+                        "url": "https://mcphackers.github.io/libraries/com/paulscode/codecjorbis/20230120/codecjorbis-20230120-sources.jar"
+                    }
+                }
+            },
+            "name": "com.paulscode:codecjorbis:20230120"
+        },
+        {
+            "downloads": {
+                "artifact": {
+                    "sha1": "12f031cfe88fef5c1dd36c563c0a3a69bd7261da",
+                    "path": "com/paulscode/codecwav/20101023/codecwav-20101023.jar",
+                    "size": 5618,
+                    "url": "https://libraries.minecraft.net/com/paulscode/codecwav/20101023/codecwav-20101023.jar"
+                },
+                "classifiers": {
+                    "sources": {
+                        "sha1": "71ec00b9b9c1a6a2c3a8a25f481a23ddb5b21ddb",
+                        "path": "com/paulscode/codecwav/20101023/codecwav-20101023-sources.jar",
+                        "size": 4938,
+                        "url": "https://libraries.minecraft.net/com/paulscode/codecwav/20101023/codecwav-20101023-sources.jar"
+                    }
+                }
+            },
+            "name": "com.paulscode:codecwav:20101023"
+        },
+        {
+            "downloads": {
+                "artifact": {
+                    "sha1": "5c5e304366f75f9eaa2e8cca546a1fb6109348b3",
+                    "path": "com/paulscode/libraryjavasound/20101123/libraryjavasound-20101123.jar",
+                    "size": 21679,
+                    "url": "https://libraries.minecraft.net/com/paulscode/libraryjavasound/20101123/libraryjavasound-20101123.jar"
+                },
+                "classifiers": {
+                    "sources": {
+                        "sha1": "945ff5711de27751cf699641d1ea316ba6cf7589",
+                        "path": "com/paulscode/libraryjavasound/20101123/libraryjavasound-20101123-sources.jar",
+                        "size": 18781,
+                        "url": "https://libraries.minecraft.net/com/paulscode/libraryjavasound/20101123/libraryjavasound-20101123-sources.jar"
+                    }
+                }
+            },
+            "name": "com.paulscode:libraryjavasound:20101123"
+        },
+        {
+            "downloads": {
+                "artifact": {
+                    "sha1": "73e80d0794c39665aec3f62eee88ca91676674ef",
+                    "path": "com/paulscode/librarylwjglopenal/20100824/librarylwjglopenal-20100824.jar",
+                    "size": 18981,
+                    "url": "https://libraries.minecraft.net/com/paulscode/librarylwjglopenal/20100824/librarylwjglopenal-20100824.jar"
+                },
+                "classifiers": {
+                    "sources": {
+                        "sha1": "ecfc8dac1d41bef748997e4edf563d486923ee1e",
+                        "path": "com/paulscode/librarylwjglopenal/20100824/librarylwjglopenal-20100824-sources.jar",
+                        "size": 19925,
+                        "url": "https://libraries.minecraft.net/com/paulscode/librarylwjglopenal/20100824/librarylwjglopenal-20100824-sources.jar"
+                    }
+                }
+            },
+            "name": "com.paulscode:librarylwjglopenal:20100824"
+        },
+        {
+            "downloads": {
+                "artifact": {
+                    "sha1": "419c05fe9be71f792b2d76cfc9b67f1ed0fec7f6",
+                    "path": "com/paulscode/soundsystem/20120107/soundsystem-20120107.jar",
+                    "size": 65020,
+                    "url": "https://libraries.minecraft.net/com/paulscode/soundsystem/20120107/soundsystem-20120107.jar"
+                },
+                "classifiers": {
+                    "sources": {
+                        "sha1": "01b9f4eb11ef11fede7fd76a2e5e8203c2a8adcd",
+                        "path": "com/paulscode/soundsystem/20120107/soundsystem-20120107-sources.jar",
+                        "size": 76061,
+                        "url": "https://libraries.minecraft.net/com/paulscode/soundsystem/20120107/soundsystem-20120107-sources.jar"
+                    }
+                }
+            },
+            "name": "com.paulscode:soundsystem:20120107"
+        }
+    ]
+}

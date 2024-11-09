@@ -1,0 +1,25 @@
+{
+    "mainClass": "org.mcphackers.launchwrapper.Launch",
+    "libraries": [
+        {
+            "name": "org.mcphackers:launchwrapper:1.0",
+            "url": "https://maven.glass-launcher.net/releases/"
+        },
+        {
+            "name": "org.json:json:20230311",
+            "url": "https://mcphackers.github.io/libraries/"
+        },
+        {
+            "name": "org.ow2.asm:asm:9.7",
+            "url": "https://maven.fabricmc.net/"
+        },
+        {
+            "name": "org.ow2.asm:asm-tree:9.7",
+            "url": "https://maven.fabricmc.net/"
+        }
+    ],
+    "assetIndex": {
+        "id": "empty",
+        "url": "https://mcphackers.github.io/assets/empty.json"
+    }
+}
