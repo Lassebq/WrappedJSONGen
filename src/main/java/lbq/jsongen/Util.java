@@ -4,6 +4,8 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -59,5 +61,15 @@ public class Util {
 		} catch (NoSuchAlgorithmException e) {
 			throw new IOException(e);
 		}
+	}
+
+	public static InputStream openStream(String url) throws IOException {
+		return openConnection(url).getInputStream();
+	}
+
+	public static HttpURLConnection openConnection(String url) throws IOException {
+		HttpURLConnection connection = (HttpURLConnection)new URL(url).openConnection();
+		connection.setRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:135.0) Gecko/20100101 Firefox/135.0");
+		return connection;
 	}
 }

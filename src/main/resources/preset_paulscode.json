@@ -7,14 +7,14 @@
         {
             "downloads": {
                 "artifact": {
-                    "sha1": "4e61cd854bbd3d9765bd7c46fc9008d654b29281\n",
+                    "sha1": "4e61cd854bbd3d9765bd7c46fc9008d654b29281",
                     "path": "com/paulscode/codecjorbis/20230120/codecjorbis-20230120.jar",
                     "size": 102767,
                     "url": "https://mcphackers.github.io/libraries/com/paulscode/codecjorbis/20230120/codecjorbis-20230120.jar"
                 },
                 "classifiers": {
                     "sources": {
-                        "sha1": "debb14b0bb049e96cc84087d3b953e56c60867c3\n",
+                        "sha1": "debb14b0bb049e96cc84087d3b953e56c60867c3",
                         "path": "com/paulscode/codecjorbis/20230120/codecjorbis-20230120-sources.jar",
                         "size": 94216,
                         "url": "https://mcphackers.github.io/libraries/com/paulscode/codecjorbis/20230120/codecjorbis-20230120-sources.jar"

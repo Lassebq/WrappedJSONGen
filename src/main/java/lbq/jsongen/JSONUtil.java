@@ -1,5 +1,7 @@
 package lbq.jsongen;
 
+import static lbq.jsongen.Util.*;
+
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -35,7 +37,7 @@ public class JSONUtil {
 			if (key.equals("libraries") && value instanceof JSONArray) {
 				JSONArray libraries = (JSONArray) value;
 				JSONArray librariesTarget = target.getJSONArray(key);
-				modified |= mergeLibraries(librariesTarget, libraries);
+				modified |= mergeLibraries(libraries, librariesTarget);
 				continue;
 			}
 			// existing value for "key":
@@ -75,29 +77,15 @@ public class JSONUtil {
 		return new JSONArray(content);
 	}
 
-	public static JSONObject getPresetJSON(String presetName) {
-		try {
-			return parseJSON(ClassLoader.getSystemResourceAsStream("preset_" + presetName + ".json"));
-		}
-		catch (IOException e) {
-			return null;
-		}
-	}
-
-	public static JSONObject getManifest() throws IOException {
-		return new JSONObject(new String(Util
-				.readAllBytes(new URL("https://launchermeta.mojang.com/mc/game/version_manifest.json").openStream())));
-	}
-
-	public static JSONObject fetchVersion(URL url) throws IOException {
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+	public static JSONObject fetchVersion(String url) throws IOException {
+		HttpURLConnection connection = openConnection(url);
 		if (connection.getResponseCode() == 404) {
-			System.err.println(url.toExternalForm() + " not found!");
+			System.err.println(url + " not found!");
 			return null;
 		}
 		while (connection.getResponseCode() == 429) {
 			System.err.println("Too many requests. Waiting for 429 to pass...");
-			connection = (HttpURLConnection) url.openConnection();
+			connection = openConnection(url);
 			try {
 				Thread.sleep(30000);
 			} catch (InterruptedException e) {

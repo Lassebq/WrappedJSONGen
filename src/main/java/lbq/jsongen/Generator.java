@@ -2,8 +2,8 @@ package lbq.jsongen;
 
 import static lbq.jsongen.JSONConstants.*;
 import static lbq.jsongen.JSONUtil.*;
+import static lbq.jsongen.Util.*;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -11,10 +11,8 @@ import java.nio.file.Path;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,110 +26,39 @@ public class Generator {
 	private boolean update;
 	private boolean packToFolders;
 	private boolean lwjglCompat;
-	private boolean multimc;
 	private boolean micromixin;
 	private Instant startTime;
 	private String postfix;
-	private String onlyver;
+	private String version;
 
-	private static final JSONObject preset_launchwrapper = getPresetJSON("launchwrapper");
-	private static final JSONObject preset_launchwrapper_micromixin = getPresetJSON("launchwrapper_micromixin");
-	private static final JSONObject preset_lwjgl3compat = getPresetJSON("lwjgl3compat");
-	private static final JSONObject preset_lwjgl3 = getPresetJSON("lwjgl3");
-	private static final JSONObject preset_lwjgl2 = getPresetJSON("lwjgl2");
-	private static final JSONObject preset_paulscode = getPresetJSON("paulscode");
-	private static JSONObject manifestBetacraft;
 	private static JSONObject manifest;
-	private static JSONObject authLib156;
-	private static JSONObject legacyIndex = legacyIndex();
-	// private Map<String, String> versionServers = new HashMap<>();
 
-	public Generator(Path dir, boolean updateJsons, boolean packToFolder, boolean genManifest, String postfixString,
-			String onlyVersion, boolean lwjgl3, boolean b1, boolean b2) {
+	public Generator(Path dir, boolean updateJsons, boolean packToFolder, boolean genManifest, String postfixString, String onlyVersion, boolean lwjgl3, boolean mm) {
 		basePath = dir;
 		generateManifest = genManifest;
 		update = updateJsons;
 		packToFolders = packToFolder;
 		startTime = Instant.now();
 		postfix = postfixString;
-		onlyver = onlyVersion;
+		version = onlyVersion;
 		lwjglCompat = lwjgl3;
-		multimc = b1;
-		micromixin = b2;
-	}
-
-	public void addMultiMCComponent(JSONArray components, JSONObject preset) {
-		JSONObject component = new JSONObject();
-		component.put("uid", preset.getString("uid"));
-		components.put(component);
+		micromixin = mm;
 	}
 
 	public void generate() throws IOException {
-		authLib156 = generateLibraryEntry("https://libraries.minecraft.net/", "com.mojang:authlib:1.5.6");
-		if(!multimc) {
-			for(JSONObject j : new JSONObject[] {preset_launchwrapper, preset_launchwrapper_micromixin, preset_lwjgl2, preset_lwjgl3, preset_lwjgl3compat, preset_paulscode}) {
-				j.remove("version");
-				j.remove("formatVersion");
-				j.remove("requires");
-				j.remove("name");
-				j.remove("uid");
-				j.remove("+traits");
-			}
-		} else {
-			for(JSONObject j : new JSONObject[] {preset_launchwrapper, preset_launchwrapper_micromixin, preset_lwjgl2, preset_lwjgl3, preset_lwjgl3compat, preset_paulscode}) {
-				JSONArray libs = j.optJSONArray("libraries");
-				if(libs != null) {
-					for(int i = 0; i < libs.length(); i++) {
-						JSONObject obj = libs.getJSONObject(i);
-						if(!obj.has("downloads") && !obj.has("url")) {
-							obj.put("downloads", new JSONObject());
-						}
-					}
-				}
-			}
-		}
-
-		if(multimc) {
-			Files.createDirectories(basePath.resolve("patches"));
-			Path lwjglJson = basePath.resolve("patches/org.lwjgl.json");
-			Path lwJson = basePath.resolve("patches/org.mcphackers.launchwrapper.json");
-			Path lwmmJson = basePath.resolve("patches/org.mcphackers.launchwrapper-micromixin.json");
-			Path paulscode = basePath.resolve("patches/com.paulscode.json");
-			
-			JSONObject mmcPack = parseJSON(basePath.resolve("mmc-pack.json"));
-			JSONArray components = mmcPack.getJSONArray("components");
-
-			if(lwjglCompat) {
-				addMultiMCComponent(components, preset_lwjgl3compat);
-				writeJSON(preset_lwjgl3compat, lwjglJson);
-			} else {
-				addMultiMCComponent(components, preset_lwjgl2);
-				writeJSON(preset_lwjgl2, lwjglJson);
-			}
-			addMultiMCComponent(components, preset_launchwrapper);
-			writeJSON(preset_launchwrapper, lwJson);
-			if(micromixin) {
-				addMultiMCComponent(components, preset_launchwrapper_micromixin);
-				writeJSON(preset_launchwrapper_micromixin, lwmmJson);
-			}
-			addMultiMCComponent(components, preset_paulscode);
-			writeJSON(preset_paulscode, paulscode);
-			writeJSON(mmcPack, basePath.resolve("mmc-pack.json"));
-			return;
-		}
 		if (update) {
 			Files.createDirectories(basePath);
 			for (Path p : collectJSONs(basePath)) {
 				JSONObject jobj = parseJSON(p);
 				String id = jobj.getString("id");
-				if(onlyver != null && !onlyver.equals(id)) {
+				if(version != null && !version.equals(id)) {
 					continue;
 				}
 				boolean updated = update(jobj);
 				if(updated)
 					System.out.println("Modified version: " + id);
 				else {
-					// System.out.println("Unmodified version: " + id);
+					System.out.println("Unmodified version: " + id);
 				}
 				id = jobj.getString("id");
 				if (updated) {
@@ -144,8 +71,7 @@ public class Generator {
 				}
 			}
 		} else {
-			manifestBetacraft = parseJSON(new URL("https://files.betacraft.uk/launcher/v2/assets/version_list.json").openStream());
-			manifest = getManifest();
+			manifest = parseJSON(openStream("https://meta.omniarchive.uk/v1/manifest.json"));
 			Files.createDirectories(basePath);
 			generateJSONs();
 		}
@@ -167,18 +93,23 @@ public class Generator {
 		json.put("id", idNew);
 		JSONArray verLibs = json.getJSONArray("libraries");
 		if (time.compareTo(PAULSCODE_TIME) > 0) {
+			JSONObject preset_paulscode = getPreset("paulscode");
 			updated |= mergePreset(preset_paulscode, json);
 		}
 		if (time.compareTo(LWJGL2_TIME) > 0) {
+			JSONObject preset_lwjgl3 = getPreset("lwjgl3");
 			updated |= mergePreset(preset_lwjgl3, json);
 		} else {
 			if (lwjglCompat) {
+				JSONObject preset_lwjgl3 = getPreset("lwjgl3");
+				JSONObject preset_lwjgl3compat = getPreset("lwjgl3compat");
 				updated |= removeLibrary(verLibs, "org.lwjgl.lwjgl", "lwjgl");
 				updated |= removeLibrary(verLibs, "org.lwjgl.lwjgl", "lwjgl_util");
 				updated |= removeLibrary(verLibs, "org.lwjgl.lwjgl", "lwjgl-platform");
 				updated |= mergePreset(preset_lwjgl3, json);
 				updated |= mergePreset(preset_lwjgl3compat, json);
 			} else {
+				JSONObject preset_lwjgl2 = getPreset("lwjgl2");
 				updated |= mergePreset(preset_lwjgl2, json);
 			}
 		}
@@ -189,46 +120,42 @@ public class Generator {
 				hasWrapper = true;
 				break;
 			}
-			if (lib[0].equals("org.mcphackers") && lib[1].equals("launchwrapper")) {
-				hasWrapper = true;
-				break;
-			}
 		}
 		Instant releaseTimeInstant = getTime(json.getString("releaseTime"));
 		if (hasWrapper) {
+			// Remove LegacyLauncher dependencies
 			updated |= removeLibrary(verLibs, "org.ow2.asm", "asm-all");
 			updated |= removeLibrary(verLibs, "net.sf.jopt-simple", "jopt-simple");
 			updated |= removeLibrary(verLibs, "net.minecraft", "launchwrapper");
-			updated |= mergePreset(preset_launchwrapper, json);
-			if(micromixin) {
-				updated |= mergePreset(preset_launchwrapper_micromixin, json);
-			}
-			if(json.has("arguments")) {
-				json.remove("arguments");
+		}
+		// TODO update LW base json to use arguments array instead (NOTE: MMC doesn't support it)
+		if(json.has("arguments")) {
+			json.remove("arguments");
+			updated = true;
+		}
+		JSONObject preset_launchwrapper = getPreset("launchwrapper");
+		updated |= mergePreset(preset_launchwrapper, json);
+		if(micromixin) {
+			JSONObject preset_launchwrapper_micromixin = getPreset("launchwrapper_micromixin");
+			updated |= mergePreset(preset_launchwrapper_micromixin, json);
+		}
+		String minecraftArguments = json.getString("minecraftArguments");
+		List<String> argsList = new ArrayList<>();
+		argsList.addAll(Arrays.asList(minecraftArguments.split(" ")));
+		if(!argsList.contains("--skinProxy")) {
+			String skin = getSkin(releaseTimeInstant, id);
+			if (skin != null) {
+				argsList.add("--skinProxy");
+				argsList.add(skin);
 				updated = true;
-			}
-			String minecraftArguments = json.optString("minecraftArguments");
-			List<String> argsList = Arrays.asList(minecraftArguments.split(" "));
-			if(!argsList.contains("--skinProxy")) {
-				String skin = getSkin(releaseTimeInstant, id);
-				if (skin != null) {
-					argsList.add("--skinProxy");
-					argsList.add(skin);
-					updated = true;
-					json.put("minecraftArguments", String.join(" ", argsList));
-				}
+				json.put("minecraftArguments", String.join(" ", argsList));
 			}
 		}
-		if (id.equals("1.7.6-pre1") || id.equals("1.7.6-pre2") || id.equals("1.7.7")) {
-			updated |= replaceLibrary(verLibs, authLib156);
-		}
-
-		// JSONObject dls = json.getJSONObject("downloads");
-		// if (!dls.has("server") && versionServers.containsKey(id)) {
-		// 	updated = true;
-		// 	String serverUrl = versionServers.get(id);
-		// 	dls.put("server", getLibraryArtifact(new URL(serverUrl).openStream(), serverUrl));
+		// if (id.equals("1.7.6-pre1") || id.equals("1.7.6-pre2") || id.equals("1.7.7")) {
+		// 	JSONObject authLib156 = generateLibraryEntry("https://libraries.minecraft.net/", "com.mojang:authlib:1.5.6");
+		// 	updated |= replaceLibrary(verLibs, authLib156);
 		// }
+
 		if (updated) {
 			json.put("time", getTimeString(startTime));
 		}
@@ -237,43 +164,34 @@ public class Generator {
 
 	public void generateJSONs() throws IOException {
 		Set<String> savedJSONs = new HashSet<>();
-		JSONArray versions1 = manifest.getJSONArray("versions");
-		JSONArray versions2 = manifestBetacraft.getJSONArray("versions");
-		Map<String, JSONObject> versions = new HashMap<>();
-		for(int i = 0; i < versions1.length(); i++) {
-			JSONObject j = versions1.getJSONObject(i);
-			versions.put(j.getString("id"), j);
-		}
-		for(int i = 0; i < versions2.length(); i++) {
-			JSONObject j = versions2.getJSONObject(i);
-			versions.put(j.getString("id"), j);
-		}
-		for (JSONObject ver : versions.values()) {
+		JSONArray versionsArr = manifest.getJSONArray("versions");
+		for(int i = 0; i < versionsArr.length(); i++) {
+			JSONObject ver = versionsArr.getJSONObject(i);
 			try {
-				URL versionUrl = new URL(ver.getString("url"));
-				if (onlyver != null && !ver.getString("id").equals(onlyver)) {
+				String versionUrl = ver.getString("url");
+				if (version != null && !ver.getString("id").equals(version)) {
 					continue;
 				}
 				String id = ver.getString("id") + (postfix == null ? "" : postfix);
 				if (savedJSONs.contains(id)) {
 					continue;
 				}
-				JSONObject version = fetchVersion(versionUrl);
+				JSONObject versionJ = fetchVersion(versionUrl);
 				System.out.print(id + "..");
-				if (version == null || !version.has("minecraftArguments")) {
+				if (versionJ == null /*|| !version.has("minecraftArguments")*/) {
 					System.out.println("skipped");
 					continue;
 				}
-				update(version);
+				update(versionJ);
 				System.out.println("done");
 				Path jsonOut = basePath.resolve(id + ".json");
-				writeJSON(version, jsonOut);
+				writeJSON(versionJ, jsonOut);
 				if (packToFolders) {
 					Path outPath = Files.createDirectory(basePath.resolve(id)).resolve(id + ".json");
 					Files.deleteIfExists(outPath);
 					Files.copy(jsonOut, outPath);
 				}
-				if (ver.getString("id").equals(onlyver)) {
+				if (ver.getString("id").equals(version)) {
 					break;
 				}
 			} catch (IOException e) {
@@ -281,18 +199,6 @@ public class Generator {
 			}
 		}
 	}
-
-	// private JSONArray removePaulscode(JSONArray libraries) {
-	// 	JSONArray librariesNoSoundLib = new JSONArray(libraries);
-	// 	for (int i = librariesNoSoundLib.length() - 1; i >= 0; i--) {
-	// 		JSONObject obj = librariesNoSoundLib.getJSONObject(i);
-	// 		String[] libraryName = obj.getString("name").split(":");
-	// 		if (libraryName[0].equals("com.paulscode")) {
-	// 			librariesNoSoundLib.remove(i);
-	// 		}
-	// 	}
-	// 	return librariesNoSoundLib;
-	// }
 
 	public void generateManifest(boolean v2) throws IOException {
 		JSONObject manifest = new JSONObject();
@@ -349,91 +255,19 @@ public class Generator {
 		writeJSON(manifest, basePath.getParent().resolve(v2 ? "version_manifest_v2.json" : "version_manifest.json"));
 	}
 
-	private static JSONObject legacyIndex() {
-		try {
-			String assetIndex = "https://launchermeta.mojang.com/v1/packages/770572e819335b6c0a053f8378ad88eda189fc14/legacy.json";
-			byte[] jar = Util.readAllBytes(new URL(assetIndex).openStream());
-			String sha1 = Util.getSHA1(new ByteArrayInputStream(jar));
-			String assetsId = assetIndex.substring(assetIndex.lastIndexOf('/') + 1).replace(".json", "");
-			JSONObject assetIndexObj = new JSONObject();
-			assetIndexObj.put("id", assetsId);
-			assetIndexObj.put("size", jar.length);
-			assetIndexObj.put("sha1", sha1);
-			assetIndexObj.put("url", assetIndex);
-			return assetIndexObj;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
+	public static JSONObject getPreset(String name) {
+		JSONObject preset = Presets.getPresetJSON(name);
+		preset.remove("version");
+		preset.remove("formatVersion");
+		preset.remove("requires");
+		preset.remove("name");
+		preset.remove("uid");
+		preset.remove("+traits");
+		return preset;
 	}
 
 	public static List<Path> collectJSONs(Path dir) throws IOException {
 		return Files.list(dir).filter(p -> (Files.isRegularFile(p) && p.getFileName().toString().endsWith(".json")))
 				.collect(Collectors.toList());
 	}
-
-	// @Deprecated
-	// public JSONObject createVersionJSON(String id, String clientURL, String serverURL, String releaseTime)
-	// 		throws IOException {
-	// 	JSONObject version = new JSONObject();
-	// 	JSONArray libraries = preset_launchwrapper.getJSONArray("libraries");
-	// 	JSONArray librariesNoSoundLib = removePaulscode(libraries);
-	// 	JSONObject downloads = new JSONObject();
-	// 	version.put("downloads", downloads);
-	// 	if (clientURL != null) {
-	// 		JSONObject client = new JSONObject();
-	// 		byte[] jar = Util.readAllBytes(new URL(clientURL).openStream());
-	// 		String sha1 = Util.getSHA1(new ByteArrayInputStream(jar));
-	// 		client.put("url", clientURL);
-	// 		client.put("size", jar.length);
-	// 		client.put("sha1", sha1);
-
-	// 		downloads.put("client", client);
-	// 	}
-	// 	if (serverURL != null) {
-	// 		JSONObject server = new JSONObject();
-	// 		byte[] jar = Util.readAllBytes(new URL(serverURL).openStream());
-	// 		String sha1 = Util.getSHA1(new ByteArrayInputStream(jar));
-	// 		server.put("url", serverURL);
-	// 		server.put("size", jar.length);
-	// 		server.put("sha1", sha1);
-
-	// 		downloads.put("server", server);
-	// 	}
-	// 	version.put("id", id);
-	// 	if (id.startsWith("a") || id.startsWith("c") || id.startsWith("in")) {
-	// 		version.put("type", "old_alpha");
-	// 	} else if (id.startsWith("b")) {
-	// 		version.put("type", "old_beta");
-	// 	} else if (id.charAt(2) == 'w' || id.equals("1.2")) {
-	// 		version.put("type", "snapshot");
-	// 	} else {
-	// 		version.put("type", "release");
-	// 	}
-	// 	version.put("releaseTime", releaseTime);
-	// 	version.put("time", getTimeString(startTime));
-	// 	Instant releaseTimeInstant = getTime(releaseTime);
-	// 	if (releaseTimeInstant.compareTo(PAULSCODE_TIME) > 0) {
-	// 		version.put("libraries", libraries);
-	// 	} else {
-	// 		version.put("libraries", librariesNoSoundLib);
-	// 	}
-	// 	for (String key : preset_launchwrapper.keySet()) {
-	// 		if (key.equals("libraries")) {
-	// 			continue;
-	// 		}
-	// 		version.put(key, preset_launchwrapper.get(key));
-	// 	}
-	// 	String args = "--username ${auth_player_name} --sessionid ${auth_session} --gameDir ${game_directory} --assetsDir ${game_assets}";
-	// 	// int port = getPort(releaseTimeInstant, id);
-	// 	// if (port != -1) {
-	// 	// 	args += " --resourcesProxyPort " + port;
-	// 	// }
-	// 	String skin = getSkin(releaseTimeInstant, id);
-	// 	if (skin != null) {
-	// 		args += " --skinProxy " + skin;
-	// 	}
-	// 	version.put("minecraftArguments", args);
-	// 	return version;
-	// }
 }

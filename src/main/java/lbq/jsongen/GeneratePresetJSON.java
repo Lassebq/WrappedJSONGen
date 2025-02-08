@@ -1,11 +1,11 @@
 package lbq.jsongen;
 
-import static lbq.jsongen.JSONUtil.generateLibraryEntry;
+import static lbq.jsongen.JSONUtil.*;
+import static lbq.jsongen.Util.*;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -79,7 +79,7 @@ public class GeneratePresetJSON {
         javaVersion.put("component", "jre-legacy");
         javaVersion.put("majorVersion", 8);
 
-		byte[] jar = Util.readAllBytes(new URL(assetIndex).openStream());
+		byte[] jar = Util.readAllBytes(openStream(assetIndex));
 		String sha1 = Util.getSHA1(new ByteArrayInputStream(jar));
         String assetsId = assetIndex.substring(assetIndex.lastIndexOf('/') + 1).replace(".json", "");
         assetIndexObj.put("id", assetsId);

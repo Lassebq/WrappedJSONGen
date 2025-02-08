@@ -1,6 +1,7 @@
 package lbq.jsongen;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Main {
@@ -13,12 +14,17 @@ public class Main {
 			System.out.println("--update - Updates existing jsons");
 			System.out.println("--postfix - Append a string to the name of each json");
 			System.out.println("--lwjgl3 - Force lwjgl3 in lwjgl2 versions using compat layer");
-			System.out.println("--version - Only generate json for a single specified version");
-			System.out.println("--multimc - Generate MultiMC components (use with --version)");
 			System.out.println("--micromixin - Include launchwrapper-micromixin mod loader");
 			return;
 		}
-		GeneratorBuilder builder = new GeneratorBuilder();
+		Path basePath = null;
+		boolean packToFolders = false;
+		boolean lwjglCompat = false;
+		boolean micromixin = false;
+		boolean manifest = false;
+		boolean update = false;
+		String postfix = null;
+		String version = null;
 		for(int i = 0; i < args.length; i++) {
 			String arg = args[i];
 			if(!arg.startsWith("--")) {
@@ -28,35 +34,32 @@ public class Main {
 			boolean hasNext = i + 1 < args.length;
 			if(hasNext && argName.equalsIgnoreCase("path")) {
 				i++;
-				builder.basePath(Paths.get(args[i]));
+				basePath = Paths.get(args[i]);
 			}
 			if(argName.equalsIgnoreCase("packToFolders")) {
-				builder.packToFolders();
+				packToFolders = true;
 			}
 			if(argName.equalsIgnoreCase("lwjgl3")) {
-				builder.lwjglCompat();
-			}
-			if(argName.equalsIgnoreCase("multimc")) {
-				builder.setMultiMC();
+				lwjglCompat = true;
 			}
 			if(argName.equalsIgnoreCase("micromixin")) {
-				builder.micromixin();
+				micromixin = true;
 			}
 			if(argName.equalsIgnoreCase("generateManifest")) {
-				builder.generateManifest();
+				manifest = true;
 			}
 			if(argName.equalsIgnoreCase("update")) {
-				builder.updateFolder();
+				update = true;
 			}
 			if(hasNext && argName.equalsIgnoreCase("postfix")) {
 				i++;
-				builder.setPostfix(args[i]);
+				postfix = args[i];
 			}
 			if(hasNext && argName.equalsIgnoreCase("version")) {
 				i++;
-				builder.setVersion(args[i]);
+				version = args[i];
 			}
 		}
-		builder.build().generate();
+		new Generator(basePath, update, packToFolders, manifest, postfix, version, lwjglCompat, micromixin).generate();
 	}
 }

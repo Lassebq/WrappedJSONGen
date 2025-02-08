@@ -5,7 +5,8 @@
     "version": "1.1",
     "libraries": [
         {
-            "name": "org.mcphackers:launchwrapper-micromixin:1.1"
+            "name": "org.mcphackers:launchwrapper-micromixin:1.1",
+            "url": "https://maven.glass-launcher.net/releases/"
         },
         {
             "name": "org.stianloader:micromixin-transformer:0.6.5-a20240922",
