@@ -5,7 +5,6 @@ import static lbq.jsongen.JSONUtil.*;
 import static lbq.jsongen.Util.*;
 
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
@@ -27,22 +26,25 @@ public class Generator {
 	private boolean packToFolders;
 	private boolean lwjglCompat;
 	private boolean micromixin;
+	private boolean clean;
 	private Instant startTime;
 	private String postfix;
 	private String version;
 
 	private static JSONObject manifest;
 
-	public Generator(Path dir, boolean updateJsons, boolean packToFolder, boolean genManifest, String postfixString, String onlyVersion, boolean lwjgl3, boolean mm) {
-		basePath = dir;
-		generateManifest = genManifest;
-		update = updateJsons;
-		packToFolders = packToFolder;
-		startTime = Instant.now();
-		postfix = postfixString;
-		version = onlyVersion;
-		lwjglCompat = lwjgl3;
-		micromixin = mm;
+	public Generator(Path dir, boolean update, boolean packToFolders, boolean genManifest, String postfix,
+			String version, boolean lwjglCompat, boolean micromixin, boolean clean) {
+		this.basePath = dir;
+		this.generateManifest = genManifest;
+		this.update = update;
+		this.packToFolders = packToFolders;
+		this.startTime = Instant.now();
+		this.postfix = postfix;
+		this.version = version;
+		this.lwjglCompat = lwjglCompat;
+		this.micromixin = micromixin;
+		this.clean = clean;
 	}
 
 	public void generate() throws IOException {
@@ -51,14 +53,14 @@ public class Generator {
 			for (Path p : collectJSONs(basePath)) {
 				JSONObject jobj = parseJSON(p);
 				String id = jobj.getString("id");
-				if(version != null && !version.equals(id)) {
+				if (version != null && !version.equals(id)) {
 					continue;
 				}
-				boolean updated = update(jobj);
-				if(updated)
+				boolean updated = update(jobj, postfix, lwjglCompat, micromixin, startTime);
+				if (updated)
 					System.out.println("Modified version: " + id);
 				else {
-					System.out.println("Unmodified version: " + id);
+					// System.out.println("Unmodified version: " + id);
 				}
 				id = jobj.getString("id");
 				if (updated) {
@@ -81,12 +83,13 @@ public class Generator {
 		}
 	}
 
-	public boolean update(JSONObject json) throws IOException {
+	public static boolean update(JSONObject json, String postfix, boolean lwjglCompat, boolean micromixin,
+			Instant startTime) throws IOException {
 		boolean updated = false;
 		Instant time = getTime(json.getString("releaseTime"));
 		String id = json.getString("id");
 		String idNew = id;
-		if(postfix != null && !id.endsWith(postfix)) {
+		if (postfix != null && !id.endsWith(postfix)) {
 			idNew = id + postfix;
 			updated = true;
 		}
@@ -128,32 +131,35 @@ public class Generator {
 			updated |= removeLibrary(verLibs, "net.sf.jopt-simple", "jopt-simple");
 			updated |= removeLibrary(verLibs, "net.minecraft", "launchwrapper");
 		}
-		// TODO update LW base json to use arguments array instead (NOTE: MMC doesn't support it)
-		if(json.has("arguments")) {
+		// TODO update LW base json to use arguments array instead (NOTE: MMC doesn't
+		// support it)
+		if (json.has("arguments")) {
 			json.remove("arguments");
 			updated = true;
 		}
 		JSONObject preset_launchwrapper = getPreset("launchwrapper");
-		updated |= mergePreset(preset_launchwrapper, json);
-		if(micromixin) {
-			JSONObject preset_launchwrapper_micromixin = getPreset("launchwrapper_micromixin");
-			updated |= mergePreset(preset_launchwrapper_micromixin, json);
-		}
-		String minecraftArguments = json.getString("minecraftArguments");
+		String minecraftArguments = preset_launchwrapper.getString("minecraftArguments");
 		List<String> argsList = new ArrayList<>();
 		argsList.addAll(Arrays.asList(minecraftArguments.split(" ")));
-		if(!argsList.contains("--skinProxy")) {
+		if (!argsList.contains("--skinProxy")) {
 			String skin = getSkin(releaseTimeInstant, id);
 			if (skin != null) {
 				argsList.add("--skinProxy");
 				argsList.add(skin);
-				updated = true;
-				json.put("minecraftArguments", String.join(" ", argsList));
+				preset_launchwrapper.put("minecraftArguments", String.join(" ", argsList));
 			}
 		}
-		// if (id.equals("1.7.6-pre1") || id.equals("1.7.6-pre2") || id.equals("1.7.7")) {
-		// 	JSONObject authLib156 = generateLibraryEntry("https://libraries.minecraft.net/", "com.mojang:authlib:1.5.6");
-		// 	updated |= replaceLibrary(verLibs, authLib156);
+		updated |= mergePreset(preset_launchwrapper, json);
+		if (micromixin) {
+			JSONObject preset_launchwrapper_micromixin = getPreset("launchwrapper_micromixin");
+			updated |= mergePreset(preset_launchwrapper_micromixin, json);
+		}
+		// if (id.equals("1.7.6-pre1") || id.equals("1.7.6-pre2") || id.equals("1.7.7"))
+		// {
+		// JSONObject authLib156 =
+		// generateLibraryEntry("https://libraries.minecraft.net/",
+		// "com.mojang:authlib:1.5.6");
+		// updated |= replaceLibrary(verLibs, authLib156);
 		// }
 
 		if (updated) {
@@ -165,7 +171,7 @@ public class Generator {
 	public void generateJSONs() throws IOException {
 		Set<String> savedJSONs = new HashSet<>();
 		JSONArray versionsArr = manifest.getJSONArray("versions");
-		for(int i = 0; i < versionsArr.length(); i++) {
+		for (int i = 0; i < versionsArr.length(); i++) {
 			JSONObject ver = versionsArr.getJSONObject(i);
 			try {
 				String versionUrl = ver.getString("url");
@@ -173,18 +179,25 @@ public class Generator {
 					continue;
 				}
 				String id = ver.getString("id") + (postfix == null ? "" : postfix);
+				Path jsonOut = basePath.resolve(id + ".json");
 				if (savedJSONs.contains(id)) {
 					continue;
 				}
-				JSONObject versionJ = fetchVersion(versionUrl);
+				if (!clean && Files.exists(jsonOut)) {
+					continue;
+				}
+				Instant time = getTime(ver.getString("releaseTime"));
+				if(lwjglCompat && time.compareTo(LWJGL2_TIME) > 0) {
+					continue;
+				}
 				System.out.print(id + "..");
-				if (versionJ == null /*|| !version.has("minecraftArguments")*/) {
+				JSONObject versionJ = fetchVersion(versionUrl);
+				if (versionJ == null /* || !version.has("minecraftArguments") */) {
 					System.out.println("skipped");
 					continue;
 				}
-				update(versionJ);
+				update(versionJ, postfix, lwjglCompat, micromixin, startTime);
 				System.out.println("done");
-				Path jsonOut = basePath.resolve(id + ".json");
 				writeJSON(versionJ, jsonOut);
 				if (packToFolders) {
 					Path outPath = Files.createDirectory(basePath.resolve(id)).resolve(id + ".json");
@@ -223,7 +236,7 @@ public class Generator {
 				version.put("releaseTime", releaseTime);
 				version.put("time", json.getString("time"));
 				version.put("type", type);
-				version.put("url", "https://mcphackers.github.io/BetterJSONs/jsons/" + id + ".json");
+				version.put("url", "https://mcphackers.org/BetterJSONs/jsons/" + id + ".json");
 				if (v2) {
 					version.put("sha1", Util.getSHA1(Files.newInputStream(p)));
 					version.put("complianceLevel", 0);
@@ -255,8 +268,13 @@ public class Generator {
 		writeJSON(manifest, basePath.getParent().resolve(v2 ? "version_manifest_v2.json" : "version_manifest.json"));
 	}
 
-	public static JSONObject getPreset(String name) {
-		JSONObject preset = Presets.getPresetJSON(name);
+	public static JSONObject getPreset(String presetName) {
+		JSONObject preset;
+		try {
+			preset = JSONUtil.parseJSON(ClassLoader.getSystemResourceAsStream("preset_" + presetName + ".json"));
+		} catch (IOException e) {
+			return null;
+		}
 		preset.remove("version");
 		preset.remove("formatVersion");
 		preset.remove("requires");

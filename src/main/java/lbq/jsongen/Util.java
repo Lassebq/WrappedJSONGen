@@ -31,12 +31,14 @@ public class Util {
 			exception = e;
 			throw e;
 		} finally {
-			if (exception == null) inputStream.close();
-			else try {
+			if (exception == null)
 				inputStream.close();
-			} catch (IOException e) {
-				exception.addSuppressed(e);
-			}
+			else
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+					exception.addSuppressed(e);
+				}
 		}
 	}
 
@@ -68,8 +70,9 @@ public class Util {
 	}
 
 	public static HttpURLConnection openConnection(String url) throws IOException {
-		HttpURLConnection connection = (HttpURLConnection)new URL(url).openConnection();
-		connection.setRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:135.0) Gecko/20100101 Firefox/135.0");
+		HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+		connection.setRequestProperty("User-Agent",
+				"Mozilla/5.0 (X11; Linux x86_64; rv:135.0) Gecko/20100101 Firefox/135.0");
 		return connection;
 	}
 }

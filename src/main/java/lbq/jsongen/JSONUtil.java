@@ -30,6 +30,7 @@ public class JSONUtil {
 		}
 		return modified;
 	}
+
 	public static boolean mergePreset(JSONObject source, JSONObject target) throws JSONException {
 		boolean modified = false;
 		for (String key : source.keySet()) {

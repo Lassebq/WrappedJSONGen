@@ -11,7 +11,8 @@
     "version": "1.0",
     "libraries": [
         {
-            "name": "org.mcphackers:legacy-lwjgl3:1.0"
+            "name": "org.mcphackers:legacy-lwjgl3:1.0",
+            "url": "https://maven.glass-launcher.net/releases/"
         },
         {
             "downloads": {
