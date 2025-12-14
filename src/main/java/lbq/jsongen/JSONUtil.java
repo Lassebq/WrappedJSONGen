@@ -15,7 +15,6 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,7 +44,11 @@ public class JSONUtil {
 			if (!target.has(key)) {
 				modified = true;
 			} else {
-				modified |= !target.get(key).equals(value);
+				if(target.get(key) instanceof JSONObject) {
+					modified |= !((JSONObject)(target.get(key))).similar(value);
+				} else {
+					modified |= !target.get(key).equals(value);
+				}
 			}
 			target.put(key, value);
 		}
@@ -114,13 +117,13 @@ public class JSONUtil {
 
 	public static boolean replaceLibrary(JSONArray libraries, JSONObject library) {
 		String[] libraryName = library.getString("name").split(":");
-		String s1 = libraryName.length == 4 ? libraryName[3] : null;
+		String s1 = libraryName.length == 4 ? libraryName[3] : "";
 		boolean replaced = false;
 		boolean changed = false;
 		for (int i = libraries.length() - 1; i >= 0; i--) {
 			String[] libraryName2 = libraries.getJSONObject(i).getString("name").split(":");
-			String s2 = libraryName2.length == 4 ? libraryName2[3] : null;
-			if (libraryName[0].equals(libraryName2[0]) && libraryName[1].equals(libraryName2[1]) && s1 == s2) {
+			String s2 = libraryName2.length == 4 ? libraryName2[3] : "";
+			if (libraryName[0].equals(libraryName2[0]) && libraryName[1].equals(libraryName2[1]) && s1.equals(s2)) {
 				changed = changed || !library.similar(libraries.getJSONObject(i));
 				if (!replaced) {
 					libraries.put(i, library);
@@ -137,6 +140,17 @@ public class JSONUtil {
 		return changed;
 	}
 
+	public static boolean containsLibrary(JSONArray libraries, String org, String name) {
+		boolean found = false;
+		for (int i = libraries.length() - 1; i >= 0; i--) {
+			String[] libraryName2 = libraries.getJSONObject(i).getString("name").split(":");
+			if (org.equals(libraryName2[0]) && name.equals(libraryName2[1])) {
+				found = true;
+			}
+		}
+		return found;
+	}
+
 	public static boolean removeLibrary(JSONArray libraries, String org, String name) {
 		boolean removed = false;
 		for (int i = libraries.length() - 1; i >= 0; i--) {
@@ -149,6 +163,14 @@ public class JSONUtil {
 		return removed;
 	}
 
+	public static JSONArray getStringsAsArray(String... list) {
+		JSONArray arr = new JSONArray();
+		for(String s : list) {
+			arr.put(s);
+		}
+		return arr;
+	}
+
 	public static Instant getTime(String time) {
 		return Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse(time));
 	}
@@ -158,136 +180,98 @@ public class JSONUtil {
 				.format(time.truncatedTo(ChronoUnit.SECONDS)).replace("Z", "+00:00");
 	}
 
-	public static JSONObject generateLibraryEntry(String repo, String library) throws IOException {
-		return generateLibraryEntry(repo, library, true);
+	// public static JSONObject generateLibraryEntry(String repo, String library) throws IOException {
+	// 	return generateLibraryEntry(repo, library, true);
+	// }
+
+	public static String getArtifactURL(String urlBase, String library, String classifier) {
+		return urlBase + getArtifactPath(library, classifier);
 	}
 
-	public static JSONObject generateLibraryEntry(String repo, String library, boolean fast) throws IOException {
-		// System.out.println(library);
-		String[] path = library.split(":");
-		String basePath = path[0].replace('.', '/') + "/" + path[1] + "/" + path[2] + "/" + path[1] + "-" + path[2];
-		String lib = basePath + ".jar";
-		JSONObject libraryObject = new JSONObject();
-		if (path.length == 4) {
-			JSONArray rulesArray = new JSONArray();
-			JSONObject rule = new JSONObject();
-			JSONObject os = new JSONObject();
-			rule.put("action", "allow");
-			rule.put("os", os);
-			lib = basePath + "-" + path[3] + ".jar";
-			if (path[3].contains("windows")) {
-				os.put("name", "windows");
-			} else if (path[3].contains("linux")) {
-				os.put("name", "linux");
-			} else if (path[3].contains("macos")) {
-				os.put("name", "osx");
-			}
-			rulesArray.put(rule);
-			libraryObject.put("rules", rulesArray);
+	public static String getArtifactPath(String library, String classifier) {
+		String[] lib = library.split(":");
+		String basePath = lib[0].replace('.', '/') + "/" + lib[1] + "/" + lib[2] + "/" + lib[1] + "-" + lib[2];
+		if(classifier == null && lib.length >= 4) {
+			classifier = lib[3];
 		}
-		String sources = basePath + "-sources.jar";
+		return basePath + (classifier != null ? ("-" + classifier) : "") + ".jar";
+	}
 
-		// TODO parse .pom for efficiency
-		HttpURLConnection urlConnection = (HttpURLConnection) (new URL(repo + lib).openConnection());
-
-		JSONObject downloads = new JSONObject();
-		if (urlConnection.getResponseCode() != 404) {
-			JSONObject artifact = new JSONObject();
-			artifact.put("url", repo + lib);
-			artifact.put("path", lib);
-			if (fast) {
-				artifact.put("size", urlConnection.getContentLengthLong());
-				HttpURLConnection sha1urlConnection = (HttpURLConnection) (new URL(repo + lib + ".sha1")
-						.openConnection());
-				if (sha1urlConnection.getResponseCode() == 404) {
-					byte[] jar = Util.readAllBytes(urlConnection.getInputStream());
-					String sha1 = Util.getSHA1(new ByteArrayInputStream(jar));
-					artifact.put("sha1", sha1);
-				} else {
-					artifact.put("sha1", Util.readString(sha1urlConnection.getInputStream()));
-				}
-			} else {
+	public static JSONObject getArtifact(String url, String path, boolean fast) throws IOException {
+		JSONObject artifact = new JSONObject();
+		artifact.put("url", url);
+		artifact.put("path", path);
+		HttpURLConnection urlConnection = (HttpURLConnection) (new URL(url).openConnection());
+		if (urlConnection.getResponseCode() != 200) {
+			return null;
+		}
+		if (fast) {
+			HttpURLConnection sha1urlConnection = (HttpURLConnection) (new URL(url + ".sha1")
+					.openConnection());
+			if (sha1urlConnection.getResponseCode() != 200) {
 				byte[] jar = Util.readAllBytes(urlConnection.getInputStream());
 				String sha1 = Util.getSHA1(new ByteArrayInputStream(jar));
 				artifact.put("size", jar.length);
 				artifact.put("sha1", sha1);
+			} else {
+				artifact.put("size", urlConnection.getContentLengthLong());
+				artifact.put("sha1", Util.readString(sha1urlConnection.getInputStream()).trim());
 			}
-			downloads.put("artifact", artifact);
+		} else {
+			byte[] jar = Util.readAllBytes(urlConnection.getInputStream());
+			String sha1 = Util.getSHA1(new ByteArrayInputStream(jar));
+			artifact.put("size", jar.length);
+			artifact.put("sha1", sha1);
 		}
-		if (path.length != 4) {
-			JSONObject classifiers = new JSONObject();
-			boolean hasClassifiers = false;
-			urlConnection = (HttpURLConnection) (new URL(repo + sources).openConnection());
-			if (urlConnection.getResponseCode() != 404) {
-				hasClassifiers = true;
-				JSONObject sourcesObj = new JSONObject();
-				sourcesObj.put("url", repo + sources);
-				sourcesObj.put("path", sources);
-				if (fast) {
-					sourcesObj.put("size", urlConnection.getContentLengthLong());
-					HttpURLConnection sha1urlConnection = (HttpURLConnection) (new URL(repo + sources + ".sha1")
-							.openConnection());
-					if (sha1urlConnection.getResponseCode() == 404) {
-						byte[] jar = Util.readAllBytes(urlConnection.getInputStream());
-						String sha1 = Util.getSHA1(new ByteArrayInputStream(jar));
-						sourcesObj.put("sha1", sha1);
-					} else {
-						sourcesObj.put("sha1", Util.readString(sha1urlConnection.getInputStream()));
-					}
-				} else {
-					byte[] jar = Util.readAllBytes(urlConnection.getInputStream());
-					String sha1 = Util.getSHA1(new ByteArrayInputStream(jar));
-					sourcesObj.put("size", jar.length);
-					sourcesObj.put("sha1", sha1);
-				}
-				classifiers.put("sources", sourcesObj);
-			}
-			boolean natives = false;
-			JSONObject nativesList = new JSONObject();
-			for (String s : new String[] { "linux", "osx", "windows" }) {
-				String nativesPath = basePath + "-natives-" + s + ".jar";
-				urlConnection = (HttpURLConnection) (new URL(repo + nativesPath).openConnection());
-				if (urlConnection.getResponseCode() == 404) {
-					continue;
-				}
-				hasClassifiers = true;
-				nativesList.put(s, "natives-" + s);
-				natives = true;
-				JSONObject nativesObj = new JSONObject();
-				nativesObj.put("url", repo + nativesPath);
-				nativesObj.put("path", nativesPath);
-				if (fast) {
-					nativesObj.put("size", urlConnection.getContentLengthLong());
-					HttpURLConnection sha1urlConnection = (HttpURLConnection) (new URL(repo + nativesPath + ".sha1")
-							.openConnection());
-					if (sha1urlConnection.getResponseCode() == 404) {
-						byte[] jar = Util.readAllBytes(urlConnection.getInputStream());
-						String sha1 = Util.getSHA1(new ByteArrayInputStream(jar));
-						nativesObj.put("sha1", sha1);
-					} else {
-						nativesObj.put("sha1", Util.readString(sha1urlConnection.getInputStream()));
-					}
-				} else {
-					byte[] jar = Util.readAllBytes(urlConnection.getInputStream());
-					String sha1 = Util.getSHA1(new ByteArrayInputStream(jar));
-					nativesObj.put("size", jar.length);
-					nativesObj.put("sha1", sha1);
-				}
-				classifiers.put("natives-" + s, nativesObj);
-			}
-			if (natives) {
-				JSONObject extract = new JSONObject();
-				JSONArray exclude = new JSONArray(Arrays.asList("META-INF/"));
-				extract.put("exclude", exclude);
-				libraryObject.put("extract", extract);
-				libraryObject.put("natives", nativesList);
-			}
-			if (hasClassifiers) {
-				downloads.put("classifiers", classifiers);
-			}
-		}
-		libraryObject.put("downloads", downloads);
-		libraryObject.put("name", library);
-		return libraryObject;
+		return artifact;
 	}
+
+	// public static JSONObject generateLibraryEntry(String repo, String library, boolean fast) throws IOException {
+	// 	// System.out.println(library);
+	// 	JSONObject libraryObject = new JSONObject();
+
+	// 	JSONObject artifact;
+	// 	JSONObject downloads = new JSONObject();
+
+	// 	String pathStr = getArtifactPath(library, null);
+	// 	artifact = getArtifact(repo + pathStr, pathStr, fast);
+	// 	if(artifact != null) {
+	// 		downloads.put("artifact", artifact);
+	// 	}
+	// 	// if (path.length != 4) {
+	// 		JSONObject classifiers = new JSONObject();
+	// 		boolean hasClassifiers = false;
+	// 		pathStr = getArtifactPath(library, "sources");
+	// 		artifact = getArtifact(repo + pathStr, pathStr, fast);
+	// 		if(artifact != null) {
+	// 			hasClassifiers = true;
+	// 			classifiers.put("sources", artifact);
+	// 		}
+	// 		boolean natives = false;
+	// 		JSONObject nativesList = new JSONObject();
+	// 		for (String s : new String[] { "linux", "osx", "windows" }) {
+	// 			pathStr = getArtifactPath(library, "natives-" + s);
+	// 			artifact = getArtifact(repo + pathStr, pathStr, fast);
+	// 			if(artifact == null) {
+	// 				continue;
+	// 			}
+	// 			classifiers.put("natives-" + s, artifact);
+	// 			nativesList.put(s, "natives-" + s);
+	// 			natives = true;
+	// 		}
+	// 		if (natives) {
+	// 			JSONObject extract = new JSONObject();
+	// 			JSONArray exclude = new JSONArray(Arrays.asList("META-INF/"));
+	// 			extract.put("exclude", exclude);
+	// 			libraryObject.put("extract", extract);
+	// 			libraryObject.put("natives", nativesList);
+	// 		}
+	// 		if (hasClassifiers) {
+	// 			downloads.put("classifiers", classifiers);
+	// 		}
+	// 	// }
+	// 	libraryObject.put("downloads", downloads);
+	// 	libraryObject.put("name", library);
+	// 	return libraryObject;
+	// }
 }

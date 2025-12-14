@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
@@ -74,5 +75,16 @@ public class Util {
 		connection.setRequestProperty("User-Agent",
 				"Mozilla/5.0 (X11; Linux x86_64; rv:135.0) Gecko/20100101 Firefox/135.0");
 		return connection;
+	}
+
+	public static void copyStream(InputStream stream1, OutputStream stream2) throws IOException {
+		int nRead;
+		byte[] data = new byte[16384];
+
+		while ((nRead = stream1.read(data, 0, data.length)) != -1) {
+			stream2.write(data, 0, nRead);
+		}
+		stream1.close();
+		stream2.close();
 	}
 }

@@ -60,6 +60,7 @@ public class MultiMCInstall {
 		}
 		Files.createDirectories(basePath.resolve("patches"));
 		Path lwjglJson = basePath.resolve("patches/org.lwjgl.json");
+		Path lwjgl3Json = basePath.resolve("patches/org.lwjgl3.json");
 		Path lwJson = basePath.resolve("patches/org.mcphackers.launchwrapper.json");
 		Path lwmmJson = basePath.resolve("patches/org.mcphackers.launchwrapper-micromixin.json");
 		Path minecraft = basePath.resolve("patches/net.minecraft.json");
@@ -91,7 +92,7 @@ public class MultiMCInstall {
 		if (lwjgl3) {
 			JSONObject lwjgl3Preset = getPreset("lwjgl3");
 			addMultiMCComponent(newComponents, "org.lwjgl3");
-			writeJSON(lwjgl3Preset, lwjglJson);
+			writeJSON(lwjgl3Preset, lwjgl3Json);
 		} else {
 			if (lwjglCompat) {
 				JSONObject lwjgl3Compat = getPreset("lwjgl3compat");
@@ -100,6 +101,8 @@ public class MultiMCInstall {
 				lwjgl3Component.put("dependencyOnly", true);
 				lwjgl3Component.put("version", "3.3.3");
 				writeJSON(lwjgl3Compat, lwjglJson);
+				JSONObject lwjgl3Preset = getPreset("lwjgl3");
+				writeJSON(lwjgl3Preset, lwjgl3Json);
 			} else {
 				JSONObject lwjgl2 = getPreset("lwjgl2");
 				addMultiMCComponent(newComponents, "org.lwjgl");

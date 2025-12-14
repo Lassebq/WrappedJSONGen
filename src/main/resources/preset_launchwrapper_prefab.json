@@ -1,0 +1,33 @@
+{
+    "uid": "org.mcphackers.launchwrapper",
+    "+traits": [
+        "noapplet"
+    ],
+    "minecraftArguments": "--username ${auth_player_name} --uuid ${auth_uuid} --session ${auth_session} --version ${version_name} --gameDir ${game_directory} --assetsDir ${assets_root} --assetIndex ${assets_index_name} --accessToken ${auth_access_token} --userProperties ${user_properties} --userType ${user_type} --versionType ${version_type}",
+    "mainClass": "org.mcphackers.launchwrapper.Launch",
+    "name": "LaunchWrapper",
+    "libraries": [
+        {
+            "name": "org.mcphackers:launchwrapper:1.2.3",
+            "url": "https://maven.glass-launcher.net/releases/"
+        },
+        {
+            "name": "org.json:json:20230311",
+            "url": "https://mcphackers.org/libraries/"
+        },
+        {
+            "name": "org.ow2.asm:asm:9.9",
+            "url": "https://maven.fabricmc.net/"
+        },
+        {
+            "name": "org.ow2.asm:asm-commons:9.9",
+            "url": "https://maven.fabricmc.net/"
+        },
+        {
+            "name": "org.ow2.asm:asm-tree:9.9",
+            "url": "https://maven.fabricmc.net/"
+        }
+    ],
+    "formatVersion": 1,
+    "version": "1.2"
+}

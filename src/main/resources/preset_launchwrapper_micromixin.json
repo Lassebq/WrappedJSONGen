@@ -5,7 +5,7 @@
     "version": "1.1",
     "libraries": [
         {
-            "name": "org.mcphackers:launchwrapper-micromixin:1.1",
+            "name": "org.mcphackers:launchwrapper-micromixin:1.1.3",
             "url": "https://maven.glass-launcher.net/releases/"
         },
         {
@@ -37,15 +37,19 @@
             "url": "https://repo1.maven.org/maven2/"
         },
         {
-            "name": "org.ow2.asm:asm:9.7",
+            "name": "org.ow2.asm:asm:9.9",
             "url": "https://maven.fabricmc.net/"
         },
         {
-            "name": "org.ow2.asm:asm-tree:9.7",
+            "name": "org.ow2.asm:asm-commons:9.9",
             "url": "https://maven.fabricmc.net/"
         },
         {
-            "name": "org.ow2.asm:asm-util:9.7",
+            "name": "org.ow2.asm:asm-tree:9.9",
+            "url": "https://maven.fabricmc.net/"
+        },
+        {
+            "name": "org.ow2.asm:asm-util:9.9",
             "url": "https://maven.fabricmc.net/"
         }
     ],

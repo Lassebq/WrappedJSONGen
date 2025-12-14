@@ -48,6 +48,8 @@ public class Generator {
 	}
 
 	public void generate() throws IOException {
+		Set<String> assets = new HashSet<>();
+		Files.createDirectories(basePath.resolve("assets"));
 		if (update) {
 			Files.createDirectories(basePath);
 			for (Path p : collectJSONs(basePath)) {
@@ -56,13 +58,56 @@ public class Generator {
 				if (version != null && !version.equals(id)) {
 					continue;
 				}
-				boolean updated = update(jobj, postfix, lwjglCompat, micromixin, startTime);
+				String assetHash = null;
+				int assetSize = 0;
+
+				JSONObject assetIndex = jobj.optJSONObject("assetIndex");
+				if(assetIndex != null) {
+					String assetsId = assetIndex.getString("id");
+					if(!assets.contains(assetsId)) {
+						assets.add(assetsId);
+						String url = assetIndex.getString("url");
+						if(!url.contains("mojang.com")) {
+							JSONObject assetsJson = JSONUtil.parseJSON(openStream(url));
+							JSONObject objects = assetsJson.getJSONObject("objects");
+							JSONObject custom = new JSONObject();
+							Set<String> removeAssets = new HashSet<>();
+							for(String s : objects.keySet()) {
+								if(s.equals("index.xml")) {
+									continue;
+								}
+								JSONObject obj = objects.getJSONObject(s);
+								if(obj.has("url")) {
+									removeAssets.add(s);
+									if(custom.isEmpty()) {
+										assetsJson.put("custom", custom);
+									}
+									custom.put(s, obj);
+								}
+							}
+							objects.remove("index.xml");
+							for(String s : removeAssets) {
+								objects.remove(s);
+							}
+							writeJSON(assetsJson, basePath.resolve("assets/" + assetsId + ".json"));
+						}
+					}
+					try {
+						assetHash = Util.getSHA1(Files.newInputStream(basePath.resolve("assets/" + assetsId + ".json")));
+						assetSize = Util.readAllBytes(Files.newInputStream(basePath.resolve("assets/" + assetsId + ".json"))).length;
+					}
+					catch (IOException e) {
+
+					}
+				}
+				boolean updated = update(jobj, postfix, lwjglCompat, micromixin, assetHash, assetSize, startTime);
 				if (updated)
 					System.out.println("Modified version: " + id);
 				else {
 					// System.out.println("Unmodified version: " + id);
 				}
 				id = jobj.getString("id");
+
 				if (updated) {
 					writeJSON(jobj, basePath.resolve(id + ".json"));
 				}
@@ -83,7 +128,7 @@ public class Generator {
 		}
 	}
 
-	public static boolean update(JSONObject json, String postfix, boolean lwjglCompat, boolean micromixin,
+	public static boolean update(JSONObject json, String postfix, boolean lwjglCompat, boolean micromixin, String assetsHash, int size,
 			Instant startTime) throws IOException {
 		boolean updated = false;
 		Instant time = getTime(json.getString("releaseTime"));
@@ -93,7 +138,19 @@ public class Generator {
 			idNew = id + postfix;
 			updated = true;
 		}
+		JSONObject assetIndex = json.getJSONObject("assetIndex");
+		String assetIndexUrl = assetIndex.getString("url");
+		String assetIndexHash = assetIndex.getString("sha1");
+		if(assetsHash != null) {
+			if(!assetsHash.equals(assetIndexHash) || !assetIndexUrl.equals( "https://mcphackers.org/BetterJSONs/jsons/assets/" + assetIndex.getString("id") + ".json")) {
+				assetIndex.put("sha1", assetsHash);
+				assetIndex.put("size", size);
+				assetIndex.put("url", "https://mcphackers.org/BetterJSONs/jsons/assets/" + assetIndex.getString("id") + ".json");
+				updated = true;
+			}
+		}
 		json.put("id", idNew);
+		lwjglCompat = id.endsWith("-lwjgl3");
 		JSONArray verLibs = json.getJSONArray("libraries");
 		if (time.compareTo(PAULSCODE_TIME) > 0) {
 			JSONObject preset_paulscode = getPreset("paulscode");
@@ -102,15 +159,18 @@ public class Generator {
 		if (time.compareTo(LWJGL2_TIME) > 0) {
 			JSONObject preset_lwjgl3 = getPreset("lwjgl3");
 			updated |= mergePreset(preset_lwjgl3, json);
+			if(lwjglCompat) {
+				return false;
+			}
 		} else {
 			if (lwjglCompat) {
-				JSONObject preset_lwjgl3 = getPreset("lwjgl3");
 				JSONObject preset_lwjgl3compat = getPreset("lwjgl3compat");
+				JSONObject preset_lwjgl3 = getPreset("lwjgl3");
 				updated |= removeLibrary(verLibs, "org.lwjgl.lwjgl", "lwjgl");
 				updated |= removeLibrary(verLibs, "org.lwjgl.lwjgl", "lwjgl_util");
 				updated |= removeLibrary(verLibs, "org.lwjgl.lwjgl", "lwjgl-platform");
-				updated |= mergePreset(preset_lwjgl3, json);
 				updated |= mergePreset(preset_lwjgl3compat, json);
+				updated |= mergePreset(preset_lwjgl3, json);
 			} else {
 				JSONObject preset_lwjgl2 = getPreset("lwjgl2");
 				updated |= mergePreset(preset_lwjgl2, json);
@@ -133,10 +193,16 @@ public class Generator {
 		}
 		// TODO update LW base json to use arguments array instead (NOTE: MMC doesn't
 		// support it)
-		if (json.has("arguments")) {
-			json.remove("arguments");
-			updated = true;
-		}
+		// if (json.has("arguments")) {
+		// 	json.remove("arguments");
+		// 	updated = true;
+		// }
+		JSONObject arguments = new JSONObject();
+		JSONArray argumentsGame = new JSONArray();
+		JSONArray argumentsJvm = new JSONArray();
+		arguments.put("game", argumentsGame);
+		arguments.put("jvm", argumentsJvm);
+
 		JSONObject preset_launchwrapper = getPreset("launchwrapper");
 		String minecraftArguments = preset_launchwrapper.getString("minecraftArguments");
 		List<String> argsList = new ArrayList<>();
@@ -146,9 +212,69 @@ public class Generator {
 			if (skin != null) {
 				argsList.add("--skinProxy");
 				argsList.add(skin);
-				preset_launchwrapper.put("minecraftArguments", String.join(" ", argsList));
+				// preset_launchwrapper.put("minecraftArguments", String.join(" ", argsList));
 			}
 		}
+		for(String s :argsList) {
+			argumentsGame.put(s);
+		}
+		JSONObject a = new JSONObject();
+		JSONObject features = new JSONObject();
+		JSONArray rules = new JSONArray();
+		JSONObject rule = new JSONObject();
+		a.put("rules", rules);
+		a.put("value", "--demo");
+		rule.put("action", "allow");
+		features.put("is_demo_user", true);
+		rule.put("features", features);
+		rules.put(rule);
+		argumentsGame.put(a);
+
+		a = new JSONObject();
+		features = new JSONObject();
+		rules = new JSONArray();
+		rule = new JSONObject();
+		a.put("rules", rules);
+		a.put("value", getStringsAsArray("--width", "${resolution_width}", "--height", "${resolution_height}"));
+		rule.put("action", "allow");
+		features.put("has_custom_resolution", true);
+		rule.put("features", features);
+		rules.put(rule);
+		argumentsGame.put(a);
+
+		a = new JSONObject();
+		features = new JSONObject();
+		rules = new JSONArray();
+		rule = new JSONObject();
+		a.put("rules", rules);
+		a.put("value", "--fullscreen");
+		rule.put("action", "allow");
+		features.put("has_fullscreen", true);
+		rule.put("features", features);
+		rules.put(rule);
+		argumentsGame.put(a);
+
+		if(containsLibrary(verLibs, "org.lwjgl", "lwjgl")) {
+			a = new JSONObject();
+			JSONObject os = new JSONObject();
+			rules = new JSONArray();
+			rule = new JSONObject();
+			a.put("rules", rules);
+			a.put("value", getStringsAsArray("-XstartOnFirstThread", "-Djava.awt.headless=true"));
+			rule.put("action", "allow");
+			os.put("name", "osx");
+			rule.put("os", os);
+			rules.put(rule);
+			argumentsJvm.put(a);
+		}
+		argumentsJvm.put("-Djava.library.path=${natives_directory}");
+        argumentsJvm.put("-Dminecraft.launcher.brand=${launcher_name}");
+        argumentsJvm.put("-Dminecraft.launcher.version=${launcher_version}");
+        argumentsJvm.put("-cp");
+        argumentsJvm.put("${classpath}");
+
+		preset_launchwrapper.put("arguments", arguments);
+		preset_launchwrapper.remove("minecraftArguments");
 		updated |= mergePreset(preset_launchwrapper, json);
 		if (micromixin) {
 			JSONObject preset_launchwrapper_micromixin = getPreset("launchwrapper_micromixin");
@@ -196,7 +322,7 @@ public class Generator {
 					System.out.println("skipped");
 					continue;
 				}
-				update(versionJ, postfix, lwjglCompat, micromixin, startTime);
+				update(versionJ, postfix, lwjglCompat, micromixin, null, 0, startTime);
 				System.out.println("done");
 				writeJSON(versionJ, jsonOut);
 				if (packToFolders) {
