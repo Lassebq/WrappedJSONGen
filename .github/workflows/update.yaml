@@ -40,7 +40,7 @@ jobs:
       run: |
           cd BetterJSONs
           git pull
-          java -jar ../build/libs/versionjsons-1.0-all.jar --update --path .
+          java -jar ../build/libs/versionjsons-1.0-all.jar --path ./jsons --generateManifest
           git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
           git config --global user.email "${{ env.CI_COMMIT_EMAIL }}"
           if [[ `git status --porcelain --untracked-files=no` ]]; then

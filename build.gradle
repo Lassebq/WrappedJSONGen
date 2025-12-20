@@ -16,7 +16,7 @@ sourceCompatibility = 1.8
 mainClassName = 'lbq.jsongen.Main'
 
 dependencies {
-    shadow 'org.json:json:20220924'
+    implementation 'org.json:json:20220924'
 }
 
 artifacts {
