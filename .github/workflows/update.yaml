@@ -50,7 +50,7 @@ jobs:
             git push
           else
             # No changes
-            echo "no changes to latest posts"
+            echo "no versions to update"
             exit 0
           fi
           

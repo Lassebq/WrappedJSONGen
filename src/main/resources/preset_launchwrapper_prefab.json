@@ -8,7 +8,7 @@
     "name": "LaunchWrapper",
     "libraries": [
         {
-            "name": "org.mcphackers:launchwrapper:1.2.3",
+            "name": "org.mcphackers:launchwrapper:1.2.4",
             "url": "https://maven.glass-launcher.net/releases/"
         },
         {

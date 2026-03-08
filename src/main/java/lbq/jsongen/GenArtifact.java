@@ -13,7 +13,7 @@ import org.json.JSONObject;
 
 public class GenArtifact {
 	public static void main(String[] args) throws IOException {
-		String prefab_name = "preset_launchwrapper";
+		String prefab_name = args[0];
 		JSONObject json = JSONUtil.parseJSON(Paths.get("src/main/resources/" + prefab_name + "_prefab.json"));
 		Path out = Paths.get("src/main/resources/" + prefab_name + ".json");
 		JSONArray libraries = json.getJSONArray("libraries");
