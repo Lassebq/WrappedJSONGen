@@ -8,6 +8,7 @@ public class JSONConstants {
 	public static final Instant PAULSCODE_TIME = Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse("2009-12-21T22:00:00+00:00"));
 	public static final Instant ASSETINDEX_TIME = Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse("2013-04-21T12:49:20+00:00"));
 	public static final Instant LWJGL2_TIME = Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse("2017-09-18T08:39:46+00:00"));
+	public static final Instant LWJGL34_TIME = Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse("2026-03-10T12:35:40+00:00"));
 
 	static Instant skin1Start = Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse("2009-06-14T07:53:24+00:00"));
 	static Instant skin2Start = Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse("2009-06-19T22:53:16+00:00"));

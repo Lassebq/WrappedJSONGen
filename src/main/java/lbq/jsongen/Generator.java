@@ -164,7 +164,7 @@ public class Generator {
 			updated |= mergePreset(preset_paulscode, json);
 		}
 		if (time.compareTo(LWJGL2_TIME) > 0) {
-			if(!lwjgl3Blacklist.contains(id)) {
+			if(!lwjgl3Blacklist.contains(id) && time.compareTo(LWJGL34_TIME) < 0) {
 				JSONObject preset_lwjgl3 = getPreset("lwjgl3");
 				updated |= mergePreset(preset_lwjgl3, json);
 				if(lwjglCompat) {
@@ -178,6 +178,13 @@ public class Generator {
 				updated |= removeLibrary(verLibs, "org.lwjgl.lwjgl", "lwjgl");
 				updated |= removeLibrary(verLibs, "org.lwjgl.lwjgl", "lwjgl_util");
 				updated |= removeLibrary(verLibs, "org.lwjgl.lwjgl", "lwjgl-platform");
+				// updated |= removeLibrary(verLibs, "org.lwjgl", "lwjgl");
+				// updated |= removeLibrary(verLibs, "org.lwjgl", "lwjgl-opengl");
+				// updated |= removeLibrary(verLibs, "org.lwjgl", "lwjgl-openal");
+				// updated |= removeLibrary(verLibs, "org.lwjgl", "lwjgl-glfw");
+				// updated |= removeLibrary(verLibs, "org.lwjgl", "lwjgl-jemalloc");
+				// updated |= removeLibrary(verLibs, "org.lwjgl", "lwjgl-stb");
+				// updated |= removeLibrary(verLibs, "org.lwjgl", "lwjgl-freetype");
 				updated |= mergePreset(preset_lwjgl3compat, json);
 				updated |= mergePreset(preset_lwjgl3, json);
 			} else {
