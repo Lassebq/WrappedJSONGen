@@ -7,6 +7,7 @@ import static lbq.jsongen.Util.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +31,7 @@ public class Generator {
 	private Instant startTime;
 	private String postfix;
 	private String version;
+	private static List<String> lwjgl3Blacklist = new ArrayList<>();
 
 	private static JSONObject manifest;
 
@@ -48,6 +50,11 @@ public class Generator {
 	}
 
 	public void generate() throws IOException {
+		JSONArray blacklistObj = parseJSONArray(Paths.get("src/main/resources/lwjgl3_blacklist.json"));
+		lwjgl3Blacklist.clear();
+		for (int i = 0; i < blacklistObj.length(); i++) {
+			lwjgl3Blacklist.add(blacklistObj.getString(i));
+		}
 		Set<String> assets = new HashSet<>();
 		Files.createDirectories(basePath.resolve("assets"));
 		if (update) {
@@ -157,10 +164,12 @@ public class Generator {
 			updated |= mergePreset(preset_paulscode, json);
 		}
 		if (time.compareTo(LWJGL2_TIME) > 0) {
-			JSONObject preset_lwjgl3 = getPreset("lwjgl3");
-			updated |= mergePreset(preset_lwjgl3, json);
-			if(lwjglCompat) {
-				return false;
+			if(!lwjgl3Blacklist.contains(id)) {
+				JSONObject preset_lwjgl3 = getPreset("lwjgl3");
+				updated |= mergePreset(preset_lwjgl3, json);
+				if(lwjglCompat) {
+					return false;
+				}
 			}
 		} else {
 			if (lwjglCompat) {
