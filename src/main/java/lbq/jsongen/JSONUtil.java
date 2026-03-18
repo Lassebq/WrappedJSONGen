@@ -155,7 +155,7 @@ public class JSONUtil {
 		boolean removed = false;
 		for (int i = libraries.length() - 1; i >= 0; i--) {
 			String[] libraryName2 = libraries.getJSONObject(i).getString("name").split(":");
-			if (org.equals(libraryName2[0]) && name.equals(libraryName2[1])) {
+			if (org.equals(libraryName2[0]) && libraryName2[1].startsWith(name)) {
 				libraries.remove(i);
 				removed = true;
 			}

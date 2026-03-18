@@ -50,7 +50,7 @@ public class Generator {
 	}
 
 	public void generate() throws IOException {
-		JSONArray blacklistObj = parseJSONArray(Paths.get("src/main/resources/lwjgl3_blacklist.json"));
+		JSONArray blacklistObj = parseJSONArray(ClassLoader.getSystemResourceAsStream("lwjgl3_blacklist.json"));
 		lwjgl3Blacklist.clear();
 		for (int i = 0; i < blacklistObj.length(); i++) {
 			lwjgl3Blacklist.add(blacklistObj.getString(i));
