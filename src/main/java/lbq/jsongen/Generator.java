@@ -286,6 +286,31 @@ public class Generator {
 		argumentsJvm.put("-Djava.library.path=${natives_directory}");
         argumentsJvm.put("-Dminecraft.launcher.brand=${launcher_name}");
         argumentsJvm.put("-Dminecraft.launcher.version=${launcher_version}");
+
+		a = new JSONObject();
+		features = new JSONObject();
+		rules = new JSONArray();
+		rule = new JSONObject();
+		a.put("rules", rules);
+		a.put("value", "-Dlaunchwrapper.wmClass=${instance_id}");
+		rule.put("action", "allow");
+		features.put("has_instance_id", true);
+		rule.put("features", features);
+		rules.put(rule);
+		argumentsJvm.put(a);
+
+		a = new JSONObject();
+		features = new JSONObject();
+		rules = new JSONArray();
+		rule = new JSONObject();
+		a.put("rules", rules);
+		a.put("value", "-Dlaunchwrapper.windowTitle=${instance_name}");
+		rule.put("action", "allow");
+		features.put("has_instance_name", true);
+		rule.put("features", features);
+		rules.put(rule);
+		argumentsJvm.put(a);
+
         argumentsJvm.put("-cp");
         argumentsJvm.put("${classpath}");
 
